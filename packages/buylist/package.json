@@ -2,9 +2,12 @@
   "name": "buylist",
   "version": "0.0.1",
   "description": "Buy list",
-  "main": "index.js",
+  "main": "app/server.js",
   "author": "Arthur Udalov <a.udalov@corp.mail.ru>",
   "license": "MIT",
+  "scripts": {
+    "start": "node app/server.js"
+  },
   "dependencies": {
     "express": "^4.16.3"
   },
