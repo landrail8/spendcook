@@ -1,0 +1,8 @@
+{
+  "name": "buylist",
+  "version": "0.0.1",
+  "description": "Buy list",
+  "main": "index.js",
+  "author": "Arthur Udalov <a.udalov@corp.mail.ru>",
+  "license": "MIT"
+}
