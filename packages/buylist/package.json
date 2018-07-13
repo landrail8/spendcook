@@ -4,5 +4,8 @@
   "description": "Buy list",
   "main": "index.js",
   "author": "Arthur Udalov <a.udalov@corp.mail.ru>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
 }
