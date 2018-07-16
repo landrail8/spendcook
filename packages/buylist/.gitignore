@@ -1,3 +1,5 @@
+app/**/*.js
+app/**/*.js.map
 *.log
 .idea/
 node_modules
