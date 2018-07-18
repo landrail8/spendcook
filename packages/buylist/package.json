@@ -9,7 +9,9 @@
     "start": "node app/server.js",
     "docker-build": "docker build . -t buylist_app",
     "docker": "docker run -t -p 8080:8080 buylist_app:latest ",
-    "build": "tsc"
+    "build": "tsc",
+    "deploy": "./deploy.sh",
+    "test": "echo 'Hello World!'"
   },
   "dependencies": {
     "express": "^4.16.3"
