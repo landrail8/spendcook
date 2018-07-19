@@ -1,5 +1,5 @@
 {
-  "name": "buylist",
+  "name": "@spendcook/api",
   "version": "0.0.1",
   "description": "Buy list",
   "main": "app/server.js",
