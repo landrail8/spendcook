@@ -1,29 +1,77 @@
 import React, { Component } from "react";
-import { Platform, StyleSheet, TabBarIOS, Text, View } from "react-native";
+import {
+  NavigatorIOS,
+  Platform,
+  StyleSheet,
+  TabBarIOS,
+  Text,
+  View
+} from "react-native";
+import Menu from "./components/Menu";
+import Recipes from "./components/Recipes";
+import ShoppingList from "./components/ShoppingList";
+import Stock from "./components/Stock";
 
-const instructions = Platform.select({
-  ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
-  android:
-    "Double tap R on your keyboard to reload,\n" +
-    "Shake or press menu button for dev menu"
-});
+const routes = [
+  {
+    key: "recipes",
+    title: "Рецепты",
+    component: Recipes
+  },
+  {
+    key: "menu",
+    title: "Меню",
+    component: Menu
+  },
+  {
+    key: "shopping-list",
+    title: "Список покупок",
+    component: ShoppingList
+  },
+  {
+    key: "stock",
+    title: "Остатки",
+    component: Stock
+  }
+];
 
 type Props = {};
-export default class App extends Component<Props> {
+
+const initialState = {
+  route: "shopping-list"
+};
+
+type State = typeof initialState;
+
+export default class App extends Component<Props, State> {
+  state = initialState;
+
   render() {
+    const { route } = this.state;
+
     return (
-      <React.Fragment>
-        <View style={styles.container}>
-          <Text style={styles.welcome}>React Native!</Text>
-          <Text style={styles.instructions}>To get started, edit App.js</Text>
-          <Text style={styles.instructions}>{instructions}</Text>
-        </View>
-        <TabBarIOS>
-          <TabBarIOS.Item title="Рецепты"/>
-          <TabBarIOS.Item title="Список покупок"/>
-          <TabBarIOS.Item title="Меню"/>
-        </TabBarIOS>
-      </React.Fragment>
+      <TabBarIOS>
+        {routes.map(({ key, title, component }) => (
+          <TabBarIOS.Item
+            key={key}
+            title={title}
+            selected={route === key}
+            onPress={() =>
+              this.setState({
+                route: key
+              })
+            }
+          >
+            <NavigatorIOS
+              initialRoute={{
+                title,
+                component
+              }}
+              style={{flex: 1}}
+            />
+          </TabBarIOS.Item>
+        ))}
+      </TabBarIOS>
     );
   }
 }
