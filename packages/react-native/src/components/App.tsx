@@ -1,16 +1,9 @@
 import React, { Component } from "react";
-import {
-  NavigatorIOS,
-  Platform,
-  StyleSheet,
-  TabBarIOS,
-  Text,
-  View
-} from "react-native";
-import Menu from "./components/Menu";
-import Recipes from "./components/Recipes";
-import ShoppingList from "./components/ShoppingList";
-import Stock from "./components/Stock";
+import { NavigatorIOS, TabBarIOS } from "react-native";
+import Menu from "./Menu";
+import Recipes from "./Recipes";
+import ShoppingList from "./ShoppingList";
+import Stock from "./Stock";
 
 const routes = [
   {
@@ -67,7 +60,7 @@ export default class App extends Component<Props, State> {
                 title,
                 component
               }}
-              style={{flex: 1}}
+              style={{ flex: 1 }}
             />
           </TabBarIOS.Item>
         ))}
@@ -75,22 +68,3 @@ export default class App extends Component<Props, State> {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: "center",
-    margin: 10
-  },
-  instructions: {
-    textAlign: "center",
-    color: "#333333",
-    marginBottom: 5
-  }
-});
