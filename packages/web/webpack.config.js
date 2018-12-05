@@ -1,12 +1,12 @@
-const path = require('path')
+const path = require("path");
 
 module.exports = {
   mode: "development",
   devtool: "inline-source-map",
-  entry: path.resolve(__dirname, 'src/webClient.js'),
+  entry: "./src/webClient.tsx",
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
+    path: path.resolve(__dirname, "dist"),
+    filename: "bundle.js"
   },
   resolve: {
     // Add `.ts` and `.tsx` as a resolvable extension.
@@ -18,4 +18,4 @@ module.exports = {
       { test: /\.tsx?$/, loader: "ts-loader" }
     ]
   }
-}
+};
