@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as express from "express";
+import * as proxy from "express-http-proxy";
 import { StaticRouter as Router } from "react-router-dom";
 import { renderToString } from "react-dom/server";
 import { SheetsRegistry } from "jss";
@@ -13,6 +14,8 @@ import App from "./components/App";
 import generateHtml from "./utils/generateHtml";
 
 const app = express();
+
+app.use("/api", proxy("localhost:8081"));
 
 app.get("*", function(req, res) {
   // Создаем JSS копилку стилей
@@ -56,5 +59,5 @@ app.get("*", function(req, res) {
 app.use("/assets", express.static("dist"));
 
 app.listen(8080, function() {
-  console.log("Example app listening on port 8080!");
+  console.log("Example src listening on port 8080!");
 });

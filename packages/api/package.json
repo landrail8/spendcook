@@ -6,7 +6,7 @@
   "author": "Arthur Udalov <a.udalov@corp.mail.ru>",
   "license": "MIT",
   "scripts": {
-    "start": "node app/server.js",
+    "start": "tsc -w & nodemon --watch src src/server.js",
     "docker-build": "docker build . -t buylist_app",
     "docker": "docker run -t -p 8080:8080 buylist_app:latest ",
     "build": "tsc",
@@ -19,6 +19,7 @@
   "devDependencies": {
     "@types/express": "^4.16.0",
     "@types/node": "^10.5.2",
+    "nodemon": "^1.18.9",
     "typescript": "^2.9.2"
   }
 }
