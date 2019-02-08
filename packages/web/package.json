@@ -28,7 +28,9 @@
     "react-dom": "^16.6.3",
     "react-jss": "^8.6.1",
     "react-router-dom": "^4.3.1",
-    "recompose": "^0.30.0"
+    "recompose": "^0.30.0",
+    "rxjs": "^6.4.0",
+    "use-rxjs": "0.0.1"
   },
   "devDependencies": {
     "nodemon": "^1.18.7",

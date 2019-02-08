@@ -1,7 +1,9 @@
-import * as React from 'react'
+import * as React from "react";
+import { interval } from "rxjs";
+import useRx from "use-rxjs";
 
 export default function Recipes() {
-  return (
-    <p>Здесь будут рецепты</p>
-  )
+  const value = useRx(() => interval(1000));
+
+  return <p>Здесь будут рецепты {value}</p>;
 }
