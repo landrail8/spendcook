@@ -14,6 +14,8 @@ import generateHtml from "./utils/generateHtml";
 
 const app = express();
 
+app.use("/assets", express.static("dist"));
+
 app.get("*", function(req, res) {
   // Создаем JSS копилку стилей
   const sheetsRegistry = new SheetsRegistry();
@@ -52,8 +54,6 @@ app.get("*", function(req, res) {
     })
   );
 });
-
-app.use("/assets", express.static("dist"));
 
 app.listen(8080, function() {
   console.log("Example app listening on port 8080!");
