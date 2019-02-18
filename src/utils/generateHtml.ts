@@ -1,4 +1,4 @@
-import { APP_CONTAINER_ID } from "../constants";
+import {APP_CONTAINER_ID, STYLES_CONTAINER_ID} from "../constants";
 
 interface Options {
   markup: string;
@@ -16,6 +16,7 @@ export default function generateHtml({ markup, css }: Options) {
           content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
         />
         <title>Title</title>
+        <style id="${STYLES_CONTAINER_ID}">${css}</style>
     </head>
     <body>
         <div id="${APP_CONTAINER_ID}">${markup}</div>
@@ -24,7 +25,6 @@ export default function generateHtml({ markup, css }: Options) {
             min-height: 100%;
         }
         </style>
-        <style id="jss-server-side">${css}</style>
         <script type="application/javascript" src="/assets/bundle.js"></script>
     </body>
     </html>

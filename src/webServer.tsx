@@ -6,11 +6,11 @@ import { SheetsRegistry } from "jss";
 import { JssProvider } from "react-jss";
 import {
   MuiThemeProvider,
-  createMuiTheme,
   createGenerateClassName
 } from "@material-ui/core/styles";
 import App from "./components/App";
 import generateHtml from "./utils/generateHtml";
+import createTheme from "./theme/createTheme";
 
 const app = express();
 
@@ -24,7 +24,7 @@ app.get("*", function(req, res) {
   const sheetsManager = new Map();
 
   // Создаем тему
-  const theme = createMuiTheme();
+  const theme = createTheme();
 
   // Создаем генератор классов
   const generateClassName = createGenerateClassName();
