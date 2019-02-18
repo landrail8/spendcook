@@ -6,23 +6,10 @@ import { APP_CONTAINER_ID, STYLES_CONTAINER_ID } from "./constants";
 import { createGenerateClassName, MuiThemeProvider } from "@material-ui/core";
 import createTheme from "./theme/createTheme";
 import { JssProvider } from "react-jss";
+import { useEffect } from "react";
 
 const generateClassName = createGenerateClassName();
 const theme = createTheme();
-
-class AppWrapper extends React.Component {
-  componentDidMount() {
-    const jssStyles = document.getElementById(STYLES_CONTAINER_ID);
-    if (jssStyles && jssStyles.parentNode) {
-      jssStyles.parentNode.removeChild(jssStyles);
-    }
-  }
-
-  render() {
-    return <App />;
-  }
-}
-
 
 hydrate(
   <Router>
@@ -34,3 +21,15 @@ hydrate(
   </Router>,
   document.getElementById(APP_CONTAINER_ID)
 );
+
+
+function AppWrapper() {
+  useEffect(() => {
+    const jssStyles = document.getElementById(STYLES_CONTAINER_ID);
+    if (jssStyles && jssStyles.parentNode) {
+      jssStyles.parentNode.removeChild(jssStyles);
+    }
+  }, []);
+
+  return <App />;
+}
