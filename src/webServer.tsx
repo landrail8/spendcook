@@ -29,9 +29,12 @@ app.get("*", function(req, res) {
   // Создаем генератор классов
   const generateClassName = createGenerateClassName();
 
+  // StaticRouter context
+  const routerContext = {};
+
   // Рисуем всёрстку приложения
   const markup = renderToString(
-    <Router location={req.url}>
+    <Router location={req.url} context={routerContext}>
       <JssProvider
         registry={sheetsRegistry}
         generateClassName={generateClassName}
