@@ -11,7 +11,7 @@ export default function Recipes() {
   const recipes = useRecipes();
 
   // Настраиваем общий observable
-  const { searchQuery, setSearchQuery, items } = useRx(() => {
+  const { searchQuery = '', setSearchQuery = () => {}, items = [] } = useRx(() => {
     const searchQuery$ = new BehaviorSubject<SearchQuery>(null);
 
     return searchQuery$.pipe(
@@ -25,7 +25,7 @@ export default function Recipes() {
         )
       )
     );
-  });
+  }) || {};
 
   return (
     <>

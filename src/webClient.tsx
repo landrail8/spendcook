@@ -7,21 +7,26 @@ import { createGenerateClassName, MuiThemeProvider } from "@material-ui/core";
 import createTheme from "./theme/createTheme";
 import { JssProvider } from "react-jss";
 import { useEffect } from "react";
+import { ResourceProvider } from "./resource/resourceContext";
+import makeResourceRegistry from "./resource/makeResourceRegistry";
+import { makeFetchResource } from "./resource/factory/fetch";
 
 const generateClassName = createGenerateClassName();
 const theme = createTheme();
+const registry = makeResourceRegistry(makeFetchResource);
 
 hydrate(
-  <Router>
-    <JssProvider generateClassName={generateClassName}>
-      <MuiThemeProvider theme={theme}>
-        <AppWrapper />
-      </MuiThemeProvider>
-    </JssProvider>
-  </Router>,
+  <ResourceProvider value={registry}>
+    <Router>
+      <JssProvider generateClassName={generateClassName}>
+        <MuiThemeProvider theme={theme}>
+          <AppWrapper />
+        </MuiThemeProvider>
+      </JssProvider>
+    </Router>
+  </ResourceProvider>,
   document.getElementById(APP_CONTAINER_ID)
 );
-
 
 function AppWrapper() {
   useEffect(() => {

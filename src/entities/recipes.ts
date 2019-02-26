@@ -1,5 +1,6 @@
-import { Observable, of } from "rxjs";
 import { map } from "rxjs/operators";
+import { useResource } from "../resource/resourceContext";
+import describeResource from "../resource/describeResource";
 
 export interface Recipe {
   id: number;
@@ -11,38 +12,26 @@ export interface SearchOptions {
   query?: string | null;
 }
 
-const data: Recipe[] = [
-  {
-    id: 1,
-    title: "Борщ",
-    description: "Борщ любят в России"
-  },
+export const recipesDescriptor = describeResource<Recipe, SearchOptions>({
+  name: "recipes",
+  applyFilter(recipes$, { query }) {
+    return recipes$.pipe(
+      map(items =>
+        items.filter(item => {
+          if (!query) {
+            return true;
+          }
 
-  {
-    id: 2,
-    title: "Сметана",
-    description: "Сметану любют борщ"
+          return (
+            item.title.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) >
+            -1
+          );
+        })
+      )
+    );
   }
-];
+});
 
 export function useRecipes() {
-  return {
-    search
-  };
-}
-
-function search({ query }: SearchOptions): Observable<Recipe[]> {
-  return of(data).pipe(
-    map(items =>
-      items.filter(item => {
-        if (!query) {
-          return true;
-        }
-
-        return (
-          item.title.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) > -1
-        );
-      })
-    )
-  );
+  return useResource(recipesDescriptor);
 }

@@ -11,10 +11,16 @@ import {
 import App from "./components/App";
 import generateHtml from "./utils/generateHtml";
 import createTheme from "./theme/createTheme";
+import makeResourceRegistry from "./resource/makeResourceRegistry";
+import makeFsResource from "./resource/factory/fs";
+import makeApiMiddleware from "./resource/apiMiddleware";
+import { ResourceProvider } from "./resource/resourceContext";
 
 const app = express();
+const registry = makeResourceRegistry(makeFsResource);
 
 app.use("/assets", express.static("dist"));
+app.use("/api", makeApiMiddleware(registry));
 
 app.get("*", function(req, res) {
   // Создаем JSS копилку стилей
@@ -32,18 +38,20 @@ app.get("*", function(req, res) {
   // StaticRouter context
   const routerContext = {};
 
-  // Рисуем всёрстку приложения
+  // Рисуем вёрстку приложения
   const markup = renderToString(
-    <Router location={req.url} context={routerContext}>
-      <JssProvider
-        registry={sheetsRegistry}
-        generateClassName={generateClassName}
-      >
-        <MuiThemeProvider theme={theme} sheetsManager={sheetsManager}>
-          <App />
-        </MuiThemeProvider>
-      </JssProvider>
-    </Router>
+    <ResourceProvider value={registry}>
+      <Router location={req.url} context={routerContext}>
+        <JssProvider
+          registry={sheetsRegistry}
+          generateClassName={generateClassName}
+        >
+          <MuiThemeProvider theme={theme} sheetsManager={sheetsManager}>
+            <App />
+          </MuiThemeProvider>
+        </JssProvider>
+      </Router>
+    </ResourceProvider>
   );
 
   // Достаем CSS из JSS копилки
