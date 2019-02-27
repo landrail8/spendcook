@@ -5,6 +5,7 @@ import { useRecipes } from "../entities/recipes";
 import RecipesHeader, { SearchQuery } from "./RecipesHeader";
 import RecipesList from "./RecipesList";
 import useInstance from "../hooks/useInstance";
+import ListLoader from "./ListLoader";
 
 export default function Recipes() {
   // Получаем доступ к ресурсу
@@ -25,7 +26,7 @@ export default function Recipes() {
   return (
     <>
       <RecipesHeader searchQuery$={searchQuery$} />
-      <RecipesList items$={items$} />
+      <ListLoader items$={items$} component={RecipesList} />
     </>
   );
 }
