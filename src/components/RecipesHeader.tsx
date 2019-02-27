@@ -8,15 +8,21 @@ import {
 import { ArrowBack, Search } from "@material-ui/icons";
 import * as React from "react";
 import { useCallback } from "react";
+import { BehaviorSubject } from "rxjs";
+import useRxjs from "use-rxjs";
 
 interface Props {
-  searchQuery: SearchQuery;
-  onSearch: (value: SearchQuery) => void;
+  searchQuery$: BehaviorSubject<SearchQuery>;
 }
 
 export type SearchQuery = null | string;
 
-export default function RecipesHeader({ searchQuery, onSearch }: Props) {
+export default function RecipesHeader({ searchQuery$ }: Props) {
+  const searchQuery = useRxjs(searchQuery$);
+  const onSearch = useCallback(
+    (value: SearchQuery) => searchQuery$.next(value),
+    [searchQuery$]
+  );
   const onEnableSearching = useCallback(() => onSearch(""), [onSearch]);
   const onDisableSearching = useCallback(() => onSearch(null), [onSearch]);
   const isSearching = searchQuery !== null;

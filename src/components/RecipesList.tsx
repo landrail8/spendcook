@@ -1,12 +1,20 @@
 import * as React from "react";
 import { List, ListItem, ListItemText } from "@material-ui/core";
 import { Recipe } from "../entities/recipes";
+import { Observable } from "rxjs";
+import useRxjs from "use-rxjs";
 
 interface Props {
-  items: Recipe[];
+  items$: Observable<Recipe[]>;
 }
 
-export default function RecipesList({ items }: Props) {
+export default function RecipesList({ items$ }: Props) {
+  const items = useRxjs(items$);
+
+  if (!items) {
+    return null;
+  }
+
   return (
     <List>
       {items.map(({ id, title, description }) => (
