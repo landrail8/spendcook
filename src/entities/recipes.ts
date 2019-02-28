@@ -1,6 +1,7 @@
 import { map } from "rxjs/operators";
 import { useResource } from "../resource/resourceContext";
 import describeResource from "../resource/describeResource";
+import { Resource } from "../resource/resource";
 
 export interface Recipe {
   id: number;
@@ -10,28 +11,36 @@ export interface Recipe {
 
 export interface SearchOptions {
   query?: string | null;
+  id?: string;
 }
 
 export const recipesDescriptor = describeResource<Recipe, SearchOptions>({
   name: "recipes",
-  applyFilter(recipes$, { query }) {
+  applyFilter(recipes$, filter) {
     return recipes$.pipe(
       map(items =>
         items.filter(item => {
-          if (!query) {
-            return true;
+          const filterQuery = filter.query && filter.query.toLocaleLowerCase();
+          const filterId = filter.id;
+
+          const itemTitle = item.title.toLocaleLowerCase();
+          const itemId = item.id.toString();
+
+          if (filterQuery && !itemTitle.includes(filterQuery)) {
+            return false;
           }
 
-          return (
-            item.title.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) >
-            -1
-          );
+          if (filterId && itemId !== filterId) {
+            return false;
+          }
+
+          return true;
         })
       )
     );
   }
 });
 
-export function useRecipes() {
+export function useRecipes(): Resource<Recipe, SearchOptions> {
   return useResource(recipesDescriptor);
 }

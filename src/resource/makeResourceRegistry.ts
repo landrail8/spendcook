@@ -31,4 +31,6 @@ export default function makeResourceRegistry(make: ResourceFactory) {
   };
 }
 
-export type ResourceRegistry = ReturnType<typeof makeResourceRegistry>;
+export interface ResourceRegistry {
+  access: <E, F>(descriptor: ResourceDescriptor<E, F>) => Resource<E, F>;
+}

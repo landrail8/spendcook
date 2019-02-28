@@ -25,12 +25,11 @@ export default function RecipesHeader({ searchQuery$ }: Props) {
   );
   const onEnableSearching = useCallback(() => onSearch(""), [onSearch]);
   const onDisableSearching = useCallback(() => onSearch(null), [onSearch]);
-  const isSearching = searchQuery !== null;
 
   return (
     <AppBar position="static">
       <Toolbar>
-        {isSearching ? (
+        {searchQuery !== null ? (
           <>
             <IconButton color="inherit" onClick={onDisableSearching}>
               <ArrowBack />
