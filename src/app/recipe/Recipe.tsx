@@ -13,7 +13,7 @@ interface RouteParams {
   id: string;
 }
 
-export default function Recipe({ match }: Props) {
+export default function Recipe({ match, history }: Props) {
   const { id } = match!.params;
   const recipes = useRecipes();
   const recipe = useRxjs(() =>
@@ -26,7 +26,7 @@ export default function Recipe({ match }: Props) {
     <>
       <AppBar position="static">
         <Toolbar>
-          <IconButton color="inherit" {...linkTo("/")}>
+          <IconButton color="inherit" onClick={() => history.goBack()}>
             <ArrowBack />
           </IconButton>
           <Typography

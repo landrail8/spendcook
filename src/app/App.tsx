@@ -13,6 +13,7 @@ export default function App() {
     <>
       <CssBaseline />
       <Route path="/" exact component={Recipes} />
+      <Route path="/recipes" exact component={Recipes} />
       <Route path="/recipes/:id" component={Recipe} />
       <Route path="/menu" component={Menu} />
       <Route path="/stock" component={Stock} />
