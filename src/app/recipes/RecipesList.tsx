@@ -11,12 +11,10 @@ export default function RecipesList({ items }: Props) {
   return (
     <List>
       {items.map(({ id, title, description }) => (
-        <React.Fragment key={id}>
-          <ListItem button {...linkTo(`/recipes/${id}`)}>
-            <div style={{ width: 100, height: 56, backgroundColor: "#ccc" }} />
-            <ListItemText primary={title} secondary={description} />
-          </ListItem>
-        </React.Fragment>
+        <ListItem button {...linkTo(`/recipes/${id}`)} key={id}>
+          <div style={{ width: 100, height: 56, backgroundColor: "#ccc" }} />
+          <ListItemText primary={title} secondary={description} />
+        </ListItem>
       ))}
     </List>
   );
