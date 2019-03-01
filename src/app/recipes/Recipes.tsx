@@ -1,11 +1,11 @@
 import * as React from "react";
 import { BehaviorSubject } from "rxjs";
 import { mergeMap } from "rxjs/operators";
-import { useRecipes } from "../entities/recipes";
+import { useRecipes } from "../../entities/recipes";
 import RecipesHeader, { SearchQuery } from "./RecipesHeader";
 import RecipesList from "./RecipesList";
-import useInstance from "../hooks/useInstance";
-import ListLoader from "./ListLoader";
+import useInstance from "../../hooks/useInstance";
+import ListLoader from "../../components/ListLoader";
 
 export default function Recipes() {
   // Получаем доступ к ресурсу

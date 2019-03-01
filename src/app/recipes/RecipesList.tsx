@@ -1,7 +1,7 @@
 import * as React from "react";
 import { List, ListItem, ListItemText } from "@material-ui/core";
-import { Recipe } from "../entities/recipes";
-import linkTo from "../utils/linkTo";
+import { Recipe } from "../../entities/recipes";
+import linkTo from "../../utils/linkTo";
 
 interface Props {
   items: Recipe[];

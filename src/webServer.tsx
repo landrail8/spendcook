@@ -8,7 +8,7 @@ import {
   MuiThemeProvider,
   createGenerateClassName
 } from "@material-ui/core/styles";
-import App from "./components/App";
+import App from "./app/App";
 import generateHtml from "./utils/generateHtml";
 import createTheme from "./theme/createTheme";
 import makeResourceRegistry from "./resource/makeResourceRegistry";

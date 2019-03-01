@@ -1,7 +1,7 @@
 import * as React from "react";
 import { hydrate } from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
-import App from "./components/App";
+import App from "./app/App";
 import { APP_CONTAINER_ID, STYLES_CONTAINER_ID } from "./constants";
 import { createGenerateClassName, MuiThemeProvider } from "@material-ui/core";
 import createTheme from "./theme/createTheme";
