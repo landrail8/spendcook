@@ -18,8 +18,12 @@ import { ResourceProvider } from "./resource/resourceContext";
 
 const app = express();
 const registry = makeResourceRegistry(makeFsResource);
+const IS_DEV = process.env.NODE_ENV !== 'production'
 
-app.use("/assets", express.static("dist"));
+if (IS_DEV) {
+  app.use("/assets", express.static("dist"));
+}
+
 app.use("/api", makeApiMiddleware(registry));
 
 app.get("*", function(req, res) {
@@ -66,6 +70,6 @@ app.get("*", function(req, res) {
   );
 });
 
-app.listen(8080, function() {
-  console.log("Example app listening on port 8080!");
+app.listen(8080, () => {
+  console.log('Spendcook app is listening port 8080!')
 });

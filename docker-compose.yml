@@ -1,0 +1,18 @@
+version: '3'
+services:
+  static:
+    build:
+      context: .
+      dockerfile: docker/static/Dockerfile
+    ports:
+      - 80:80
+    networks:
+      - internal
+  dynamic:
+    build:
+      context: .
+      dockerfile: docker/dynamic/Dockerfile
+    networks:
+      - internal
+networks:
+  internal:

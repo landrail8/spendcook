@@ -5,6 +5,9 @@ src/**/*.js.map
 # Bundles
 dist/
 
+# Node production
+lib/
+
 # Others
 *.log
 .idea/
