@@ -1,7 +1,7 @@
 import { descriptorRegistry, ResourceDescriptor } from "./resource";
 
-export default function describeResource<E, F>(
-  descriptor: ResourceDescriptor<E, F>
+export default function describeResource<E>(
+  descriptor: ResourceDescriptor<E>
 ) {
   const { name } = descriptor;
 

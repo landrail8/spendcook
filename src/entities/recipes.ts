@@ -4,18 +4,14 @@ import describeResource from "../resource/describeResource";
 import { Resource } from "../resource/resource";
 
 export interface Recipe {
-  id: number;
+  id: string;
   title: string;
   description: string;
 }
 
-export interface SearchOptions {
-  query?: string | null;
-  id?: string;
-}
-
-export const recipesDescriptor = describeResource<Recipe, SearchOptions>({
+export const recipesDescriptor = describeResource<Recipe>({
   name: "recipes",
+  getId: ({ id }) => id,
   applyFilter(recipes$, filter) {
     return recipes$.pipe(
       map(items =>
@@ -41,6 +37,6 @@ export const recipesDescriptor = describeResource<Recipe, SearchOptions>({
   }
 });
 
-export function useRecipes(): Resource<Recipe, SearchOptions> {
+export function useRecipes(): Resource<Recipe> {
   return useResource(recipesDescriptor);
 }

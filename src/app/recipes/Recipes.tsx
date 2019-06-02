@@ -24,7 +24,7 @@ export default function Recipes({ history, location }: Props) {
   const items$ = useInstance(() =>
     searchQuery$.pipe(
       tap(query => history.replace(generateUrl(query))),
-      mergeMap(query => recipes.search({ query }))
+      mergeMap(query => recipes.search({ query: query || undefined }))
     )
   );
 

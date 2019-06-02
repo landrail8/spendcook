@@ -16,9 +16,7 @@ interface RouteParams {
 export default function Recipe({ match, history }: Props) {
   const { id } = match!.params;
   const recipes = useRecipes();
-  const recipe = useRxjs(() =>
-    recipes.search({ id }).pipe(map(items => items[0]))
-  );
+  const recipe = useRxjs(() => recipes.getById(id));
 
   const title = recipe ? recipe.title : "Loading...";
 

@@ -1,11 +1,17 @@
-import {APP_CONTAINER_ID, STYLES_CONTAINER_ID} from "../constants";
+import {
+  APP_CONTAINER_ID,
+  CACHE_CONTAINER_ID,
+  STYLES_CONTAINER_ID
+} from "../constants";
+import { SerializableData } from "../resource/driver/cache";
 
 interface Options {
   markup: string;
   css: string;
+  cacheData: SerializableData;
 }
 
-export default function generateHtml({ markup, css }: Options) {
+export default function generateHtml({ markup, css, cacheData }: Options) {
   return `
     <!DOCTYPE html>
     <html lang="en">
@@ -25,6 +31,9 @@ export default function generateHtml({ markup, css }: Options) {
             min-height: 100%;
         }
         </style>
+        <script type="application/json" id="${CACHE_CONTAINER_ID}">
+            ${JSON.stringify(cacheData)}
+        </script>
         <script type="application/javascript" src="/assets/bundle.js"></script>
     </body>
     </html>

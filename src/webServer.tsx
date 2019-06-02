@@ -11,52 +11,66 @@ import {
 import App from "./app/App";
 import generateHtml from "./utils/generateHtml";
 import createTheme from "./theme/createTheme";
-import makeResourceRegistry from "./resource/makeResourceRegistry";
-import makeFsResource from "./resource/factory/fs";
+import { makeFsDriver } from "./resource/driver/fs";
 import makeApiMiddleware from "./resource/apiMiddleware";
 import { ResourceProvider } from "./resource/resourceContext";
+import { makeCacheDriver } from "./resource/driver/cache";
 
 const app = express();
-const registry = makeResourceRegistry(makeFsResource);
-const IS_DEV = process.env.NODE_ENV !== 'production'
+const fsDriver = makeFsDriver();
+const IS_DEV = process.env.NODE_ENV !== "production";
 
 if (IS_DEV) {
   app.use("/assets", express.static("dist"));
 }
 
-app.use("/api", makeApiMiddleware(registry));
+app.use("/api", makeApiMiddleware(fsDriver));
 
-app.get("*", function(req, res) {
+app.get("*", async function(req, res) {
+  console.log('request:',req.path)
+
   // Создаем JSS копилку стилей
   const sheetsRegistry = new SheetsRegistry();
-
-  // Создаем sheetsManager для material-ui
-  const sheetsManager = new Map();
-
-  // Создаем тему
-  const theme = createTheme();
-
-  // Создаем генератор классов
-  const generateClassName = createGenerateClassName();
 
   // StaticRouter context
   const routerContext = {};
 
-  // Рисуем вёрстку приложения
-  const markup = renderToString(
-    <ResourceProvider value={registry}>
-      <Router location={req.url} context={routerContext}>
-        <JssProvider
-          registry={sheetsRegistry}
-          generateClassName={generateClassName}
-        >
-          <MuiThemeProvider theme={theme} sheetsManager={sheetsManager}>
-            <App />
-          </MuiThemeProvider>
-        </JssProvider>
-      </Router>
-    </ResourceProvider>
-  );
+  const cacheDriver = makeCacheDriver(fsDriver);
+
+  const makeJsx = (sheetsRegistry: SheetsRegistry) => {
+    // Создаем sheetsManager для material-ui
+    const sheetsManager = new Map();
+
+    // Создаем тему
+    const theme = createTheme();
+
+    // Создаем генератор классов
+    const generateClassName = createGenerateClassName();
+
+    return (
+      <ResourceProvider driver={cacheDriver}>
+        <Router location={req.url} context={routerContext}>
+          <JssProvider
+            registry={sheetsRegistry}
+            generateClassName={generateClassName}
+          >
+            <MuiThemeProvider theme={theme} sheetsManager={sheetsManager}>
+              <App />
+            </MuiThemeProvider>
+          </JssProvider>
+        </Router>
+      </ResourceProvider>
+    )
+  };
+
+  // Запускаем процесс сбора требований
+  renderToString(makeJsx(new SheetsRegistry()));
+
+  // Ждем сбора данных
+  const cacheData = await cacheDriver.release();
+
+  // Рендерим повторно с данными
+  const markup = renderToString(makeJsx(sheetsRegistry));
 
   // Достаем CSS из JSS копилки
   const css = sheetsRegistry.toString();
@@ -64,12 +78,15 @@ app.get("*", function(req, res) {
   // Отправляем html клиенту
   res.send(
     generateHtml({
+      cacheData,
       markup,
       css
     })
   );
+
+  console.log('--------')
 });
 
 app.listen(8080, () => {
-  console.log('Spendcook app is listening port 8080!')
+  console.log("Spendcook app is listening port 8080!");
 });
