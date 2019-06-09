@@ -7,6 +7,17 @@ export interface Recipe {
   id: string;
   title: string;
   description: string;
+  steps: Step;
+  estimate: EstimateItem[];
+}
+
+interface Step {
+
+}
+
+interface EstimateItem {
+  ingredientId: string;
+  amount: number;
 }
 
 export const recipesDescriptor = describeResource<Recipe>({

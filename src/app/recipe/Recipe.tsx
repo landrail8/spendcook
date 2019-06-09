@@ -1,11 +1,10 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
-import { AppBar, IconButton, Toolbar, Typography } from "@material-ui/core";
-import { ArrowBack } from "@material-ui/icons";
+import { AppBar, Toolbar } from "@material-ui/core";
 import useRxjs from "use-rxjs";
-import linkTo from "../../utils/linkTo";
 import { useRecipes } from "../../entities/recipes";
-import { map } from "rxjs/operators";
+import HeaderTitle from "../../components/Header/HeaderTitle";
+import HeaderBack from "../../components/Header/HeaderBack";
 
 interface Props extends RouteComponentProps<RouteParams> {}
 
@@ -13,7 +12,7 @@ interface RouteParams {
   id: string;
 }
 
-export default function Recipe({ match, history }: Props) {
+export default function Recipe({ match }: Props) {
   const { id } = match!.params;
   const recipes = useRecipes();
   const recipe = useRxjs(() => recipes.getById(id));
@@ -24,16 +23,8 @@ export default function Recipe({ match, history }: Props) {
     <>
       <AppBar position="static">
         <Toolbar>
-          <IconButton color="inherit" onClick={() => history.goBack()}>
-            <ArrowBack />
-          </IconButton>
-          <Typography
-            variant="h6"
-            color="inherit"
-            style={{ flexGrow: 1, marginLeft: 32 }}
-          >
-            {title}
-          </Typography>
+          <HeaderBack />
+          <HeaderTitle style={{ marginLeft: 32 }}>{title}</HeaderTitle>
         </Toolbar>
       </AppBar>
     </>

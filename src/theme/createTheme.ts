@@ -1,9 +1,5 @@
-import { createMuiTheme } from "@material-ui/core";
+import { createMuiTheme } from "@material-ui/core/styles";
 
 export default function createTheme() {
-  return createMuiTheme({
-    typography: {
-      useNextVariants: true
-    }
-  });
+  return createMuiTheme();
 }

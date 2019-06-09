@@ -8,6 +8,7 @@ import useInstance from "../../hooks/useInstance";
 import ListLoader from "../../components/ListLoader";
 import { RouteComponentProps } from "react-router";
 import * as qs from "query-string";
+import AddRecipeButton from "./AddRecipeButton";
 
 interface Props extends RouteComponentProps {}
 
@@ -32,6 +33,7 @@ export default function Recipes({ history, location }: Props) {
     <>
       <RecipesHeader searchQuery$={searchQuery$} />
       <ListLoader items$={items$} component={RecipesList} />
+      <AddRecipeButton />
     </>
   );
 }

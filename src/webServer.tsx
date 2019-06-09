@@ -4,10 +4,7 @@ import { StaticRouter as Router } from "react-router-dom";
 import { renderToString } from "react-dom/server";
 import { SheetsRegistry } from "jss";
 import { JssProvider } from "react-jss";
-import {
-  MuiThemeProvider,
-  createGenerateClassName
-} from "@material-ui/core/styles";
+import { ServerStyleSheets, ThemeProvider } from "@material-ui/styles";
 import App from "./app/App";
 import generateHtml from "./utils/generateHtml";
 import createTheme from "./theme/createTheme";
@@ -27,53 +24,42 @@ if (IS_DEV) {
 app.use("/api", makeApiMiddleware(fsDriver));
 
 app.get("*", async function(req, res) {
-  console.log('request:',req.path)
+  console.log("request:", req.path);
 
   // Создаем JSS копилку стилей
-  const sheetsRegistry = new SheetsRegistry();
+  const sheets = new ServerStyleSheets();
 
   // StaticRouter context
   const routerContext = {};
 
   const cacheDriver = makeCacheDriver(fsDriver);
 
-  const makeJsx = (sheetsRegistry: SheetsRegistry) => {
-    // Создаем sheetsManager для material-ui
-    const sheetsManager = new Map();
-
+  const makeJsx = (sheets: ServerStyleSheets) => {
     // Создаем тему
     const theme = createTheme();
 
-    // Создаем генератор классов
-    const generateClassName = createGenerateClassName();
-
-    return (
+    return sheets.collect(
       <ResourceProvider driver={cacheDriver}>
         <Router location={req.url} context={routerContext}>
-          <JssProvider
-            registry={sheetsRegistry}
-            generateClassName={generateClassName}
-          >
-            <MuiThemeProvider theme={theme} sheetsManager={sheetsManager}>
-              <App />
-            </MuiThemeProvider>
-          </JssProvider>
+          <ThemeProvider theme={theme}>
+            <App />
+          </ThemeProvider>
         </Router>
       </ResourceProvider>
-    )
+    );
   };
 
   // Запускаем процесс сбора требований
-  renderToString(makeJsx(new SheetsRegistry()));
+  renderToString(makeJsx(new ServerStyleSheets()));
 
   // Ждем сбора данных
   const cacheData = await cacheDriver.release();
 
   // Рендерим повторно с данными
-  const markup = renderToString(makeJsx(sheetsRegistry));
+  const markup = renderToString(makeJsx(sheets));
 
   // Достаем CSS из JSS копилки
-  const css = sheetsRegistry.toString();
+  const css = sheets.toString();
 
   // Отправляем html клиенту
   res.send(
@@ -83,8 +69,6 @@ app.get("*", async function(req, res) {
       css
     })
   );
-
-  console.log('--------')
 });
 
 app.listen(8080, () => {

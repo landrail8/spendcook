@@ -5,6 +5,8 @@ import { useCallback } from "react";
 import { BehaviorSubject } from "rxjs";
 import useRxjs from "use-rxjs";
 import Header from "../../components/Header/Header";
+import HeaderTitle from "../../components/Header/HeaderTitle";
+import HeaderBack from "../../components/Header/HeaderBack";
 
 interface Props {
   searchQuery$: BehaviorSubject<SearchQuery>;
@@ -25,9 +27,7 @@ export default function RecipesHeader({ searchQuery$ }: Props) {
     <Header>
       {searchQuery !== null ? (
         <>
-          <IconButton color="inherit" onClick={onDisableSearching}>
-            <ArrowBack />
-          </IconButton>
+          <HeaderBack onClick={onDisableSearching} />
           <InputBase
             autoFocus
             value={searchQuery}
@@ -38,9 +38,7 @@ export default function RecipesHeader({ searchQuery$ }: Props) {
         </>
       ) : (
         <>
-          <Typography variant="h6" color="inherit" style={{ flexGrow: 1 }}>
-            Рецепты
-          </Typography>
+          <HeaderTitle>Рецепты</HeaderTitle>
           <IconButton onClick={onEnableSearching} color="inherit">
             <Search />
           </IconButton>

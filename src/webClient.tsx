@@ -7,15 +7,13 @@ import {
   CACHE_CONTAINER_ID,
   STYLES_CONTAINER_ID
 } from "./constants";
-import { createGenerateClassName, MuiThemeProvider } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/styles";
 import createTheme from "./theme/createTheme";
-import { JssProvider } from "react-jss";
 import { useEffect } from "react";
 import { ResourceProvider } from "./resource/resourceContext";
 import { makeFetchDriver } from "./resource/driver/fetch";
 import { makeCacheDriver, SerializableData } from "./resource/driver/cache";
 
-const generateClassName = createGenerateClassName();
 const theme = createTheme();
 const cacheData: SerializableData = JSON.parse(
   document.getElementById(CACHE_CONTAINER_ID)!.innerText
@@ -25,11 +23,9 @@ const driver = makeCacheDriver(makeFetchDriver(), cacheData);
 hydrate(
   <ResourceProvider driver={driver}>
     <Router>
-      <JssProvider generateClassName={generateClassName}>
-        <MuiThemeProvider theme={theme}>
-          <AppWrapper />
-        </MuiThemeProvider>
-      </JssProvider>
+      <ThemeProvider theme={theme}>
+        <AppWrapper />
+      </ThemeProvider>
     </Router>
   </ResourceProvider>,
   document.getElementById(APP_CONTAINER_ID)

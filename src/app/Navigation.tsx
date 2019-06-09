@@ -1,12 +1,7 @@
 import * as React from "react";
-import { Link, LinkProps } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { BottomNavigation, BottomNavigationAction } from "@material-ui/core";
-import { BottomNavigationActionProps } from "@material-ui/core/BottomNavigationAction";
 import withRouteContext, { RouteContextProps } from "../hocs/withRouteContext";
-
-const NavigationAction = BottomNavigationAction as React.ComponentType<
-  LinkProps | BottomNavigationActionProps
->;
 
 interface Props extends RouteContextProps {}
 
@@ -22,7 +17,7 @@ function Navigation({ index: value, routes }: Props) {
       showLabels
     >
       {routes.map(({ path, label, icon: IconComponent }, value) => (
-        <NavigationAction
+        <BottomNavigationAction
           key={value}
           value={value}
           label={label}
