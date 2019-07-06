@@ -1,28 +1,13 @@
 import { map } from "rxjs/operators";
-import { useResource } from "../resource/resourceContext";
-import describeResource from "../resource/describeResource";
-import { Resource } from "../resource/resource";
+import { Entity, Resource, describeResource, useResource } from "../resource";
 
-export interface Recipe {
-  id: string;
+export interface Recipe extends Entity {
   title: string;
   description: string;
-  steps: Step;
-  estimate: EstimateItem[];
-}
-
-interface Step {
-
-}
-
-interface EstimateItem {
-  ingredientId: string;
-  amount: number;
 }
 
 export const recipesDescriptor = describeResource<Recipe>({
   name: "recipes",
-  getId: ({ id }) => id,
   applyFilter(recipes$, filter) {
     return recipes$.pipe(
       map(items =>

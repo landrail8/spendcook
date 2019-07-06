@@ -1,12 +1,18 @@
-import { Filter, ResourceDescriptor, ResourceDriver } from "../../resource";
 import serializeFilter from "../../utils/serializeFilter";
 import { Observable, of, ReplaySubject } from "rxjs";
 import { tap } from "rxjs/operators";
 import {
+  Filter,
+  ResourceDescriptor,
+  ResourceDriver,
   EntityRegistry,
   SearchRecord,
   SearchRegistry,
-  SerializableData
+  SerializableData,
+  Entity,
+  EntityId,
+  ExistingEntity,
+  EntityList
 } from "./types";
 import generateSearchKey from "./generateSearchKey";
 import generateEntityKey from "./generateEntityKey";
@@ -24,11 +30,7 @@ export default class CacheDriver implements ResourceDriver {
     this.searches = searches;
   }
 
-  search<E>(descriptor: ResourceDescriptor<E>, filter: Filter) {
-    console.log("search:", descriptor.name, serializeFilter(filter));
-
-    console.log("isGetOneByIdFilter(filter)", isGetOneByIdFilter(filter));
-
+  search<E extends Entity>(descriptor: ResourceDescriptor<E>, filter: Filter) {
     // Поиск одного элемента по id
     if (isGetOneByIdFilter(filter)) {
       const entity = this.getById(descriptor, filter.id);
@@ -52,7 +54,7 @@ export default class CacheDriver implements ResourceDriver {
         record.idList.map(itemId => {
           const itemKey = generateEntityKey(descriptor, itemId);
 
-          return this.entities[itemKey] as E;
+          return this.entities[itemKey] as ExistingEntity<E>;
         })
       );
     }
@@ -61,10 +63,14 @@ export default class CacheDriver implements ResourceDriver {
     return this.searchByOrigin(record);
   }
 
-  async release(): Promise<SerializableData> {
-    console.log("release");
-    console.log("pendingSearchCount", this.pendingSearchCount);
+  post<E extends Entity>(
+    descriptor: ResourceDescriptor<E>,
+    entities: E[]
+  ): Observable<EntityList<E>> {
+    return this.origin.post(descriptor, entities);
+  }
 
+  async release(): Promise<SerializableData> {
     if (this.pendingSearchCount > 0) {
       const release = new Promise(resolve => {
         this.resolveRelease = resolve;
@@ -81,13 +87,16 @@ export default class CacheDriver implements ResourceDriver {
   private readonly entities: EntityRegistry;
   private readonly searches: SearchRegistry;
 
-  private getById<E>(descriptor: ResourceDescriptor<E>, id: string): E | null {
+  private getById<E extends Entity>(
+    descriptor: ResourceDescriptor<E>,
+    id: string
+  ): ExistingEntity<E> | null {
     const key = generateEntityKey(descriptor, id);
 
-    return (this.entities[key] as E) || null;
+    return (this.entities[key] as ExistingEntity<E>) || null;
   }
 
-  private getSearchRecord<E>(
+  private getSearchRecord<E extends Entity>(
     descriptor: ResourceDescriptor<E>,
     filter: Filter
   ) {
@@ -105,10 +114,10 @@ export default class CacheDriver implements ResourceDriver {
     return searches[key] as SearchRecord<E>;
   }
 
-  private searchByOrigin<E>(record: SearchRecord<E>) {
+  private searchByOrigin<E extends Entity>(record: SearchRecord<E>) {
     const { descriptor, filter } = record;
     const originResult$ = this.origin.search(descriptor, filter);
-    const result$ = new ReplaySubject<E[]>(1);
+    const result$ = new ReplaySubject<EntityList<E>>(1);
 
     record.result$ = result$;
     this.pendingSearchCount++;
@@ -130,9 +139,12 @@ export default class CacheDriver implements ResourceDriver {
     return result$;
   }
 
-  private cacheEntities<E>(descriptor: ResourceDescriptor<E>, items: E[]) {
+  private cacheEntities<E extends Entity>(
+    descriptor: ResourceDescriptor<E>,
+    items: Array<Entity & { id: EntityId }>
+  ) {
     return items.map(item => {
-      const itemId = descriptor.getId(item);
+      const itemId = item.id;
       const itemKey = generateEntityKey(descriptor, itemId);
 
       this.entities[itemKey] = item;

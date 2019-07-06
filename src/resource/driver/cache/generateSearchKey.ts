@@ -1,8 +1,8 @@
-import { Filter, ResourceDescriptor } from "../../resource";
+import { Entity, Filter, ResourceDescriptor } from "./types";
 import serializeFilter from "../../utils/serializeFilter";
 
 export default function generateSearchKey(
-  descriptor: ResourceDescriptor<unknown>,
+  descriptor: ResourceDescriptor<Entity>,
   filter: Filter
 ) {
   return `${descriptor.name}?${serializeFilter(filter)}`;

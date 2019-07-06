@@ -1,4 +1,4 @@
-import { ResourceDriver } from "../../resource";
+import { ResourceDriver } from "../../types";
 import CacheDriver from "./CacheDriver";
 import { SerializableData } from "./types";
 

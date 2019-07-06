@@ -27,6 +27,7 @@ export default function Recipe({ match }: Props) {
           <HeaderTitle style={{ marginLeft: 32 }}>{title}</HeaderTitle>
         </Toolbar>
       </AppBar>
+      {recipe ? recipe.description : "Loading..."}
     </>
   );
 }

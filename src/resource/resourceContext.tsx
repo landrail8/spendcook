@@ -1,6 +1,7 @@
 import * as React from "react";
-import { makeResource, ResourceDescriptor, ResourceDriver } from "./resource";
+import { Entity, ResourceDescriptor, ResourceDriver } from "./types";
 import { useContext } from "react";
+import makeResource from "./makeResource";
 
 const context = React.createContext<ResourceDriver | null>(null);
 
@@ -15,7 +16,9 @@ export function ResourceProvider({ driver, children }: Props) {
   return <Provider value={driver}>{children}</Provider>;
 }
 
-export function useResource<E>(descriptor: ResourceDescriptor<E>) {
+export function useResource<E extends Entity>(
+  descriptor: ResourceDescriptor<E>
+) {
   const driver = useContext(context);
 
   return makeResource(driver!, descriptor);

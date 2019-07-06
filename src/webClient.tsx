@@ -10,7 +10,7 @@ import {
 import { ThemeProvider } from "@material-ui/styles";
 import createTheme from "./theme/createTheme";
 import { useEffect } from "react";
-import { ResourceProvider } from "./resource/resourceContext";
+import { ResourceProvider } from "./resource";
 import { makeFetchDriver } from "./resource/driver/fetch";
 import { makeCacheDriver, SerializableData } from "./resource/driver/cache";
 

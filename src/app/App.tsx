@@ -7,7 +7,7 @@ import Recipe from "./recipe/Recipe";
 import Menu from "./menu/Menu";
 import Stock from "./stock/Stock";
 import Shopping from "./shopping/Shopping";
-import RecipeForm from "./RecipeForm/RecipeForm";
+import RecipeForm from "./RecipeForm";
 
 export default function App() {
   return (

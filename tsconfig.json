@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "moduleResolution": "node",
     "strictNullChecks": true,
+    "skipLibCheck": true,
     "target": "esnext",
     "jsx": "react",
     "sourceMap": true,

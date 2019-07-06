@@ -1,6 +1,7 @@
-import { descriptorRegistry, ResourceDescriptor } from "./resource";
+import { Dictionary, Entity, ResourceDescriptor } from "./types";
+import descriptorRegistry from "./descriptorRegistry";
 
-export default function describeResource<E>(
+export default function describeResource<E extends Entity>(
   descriptor: ResourceDescriptor<E>
 ) {
   const { name } = descriptor;

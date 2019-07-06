@@ -1,7 +1,7 @@
-import { ResourceDescriptor } from "../../resource";
+import { Entity, ResourceDescriptor } from "../../types";
 
 export default function generateEntityKey(
-  descriptor: ResourceDescriptor<unknown>,
+  descriptor: ResourceDescriptor<Entity>,
   id: string
 ) {
   return `${descriptor.name}:${id}`;

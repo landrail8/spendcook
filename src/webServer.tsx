@@ -2,16 +2,14 @@ import * as React from "react";
 import * as express from "express";
 import { StaticRouter as Router } from "react-router-dom";
 import { renderToString } from "react-dom/server";
-import { SheetsRegistry } from "jss";
-import { JssProvider } from "react-jss";
 import { ServerStyleSheets, ThemeProvider } from "@material-ui/styles";
 import App from "./app/App";
 import generateHtml from "./utils/generateHtml";
 import createTheme from "./theme/createTheme";
+import { ResourceProvider } from "./resource";
 import { makeFsDriver } from "./resource/driver/fs";
-import makeApiMiddleware from "./resource/apiMiddleware";
-import { ResourceProvider } from "./resource/resourceContext";
 import { makeCacheDriver } from "./resource/driver/cache";
+import makeApiMiddleware from "./resource/makeApiMiddleware";
 
 const app = express();
 const fsDriver = makeFsDriver();

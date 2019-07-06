@@ -1,5 +1,4 @@
-import { Filter } from "../../resource";
-import { EntityId } from "../../types";
+import { Filter, EntityId } from "../../types";
 
 export default function isGetOneByIdFilter(
   filter: Filter
