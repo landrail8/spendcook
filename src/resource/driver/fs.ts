@@ -1,6 +1,6 @@
 import { Observable } from "rxjs";
 import * as fs from "fs";
-import { mergeMap } from "rxjs/operators";
+import { map, mergeMap } from "rxjs/operators";
 import {
   Entity,
   EntityList,
@@ -18,11 +18,11 @@ export function makeFsDriver(): ResourceDriver {
 }
 
 function search<E extends Entity>(
-  { applyFilter, name }: ResourceDescriptor<E>,
+  descriptor: ResourceDescriptor<E>,
   filter: Filter
 ): Observable<EntityList<E>> {
   const data$ = new Observable<EntityList<E>>(observer => {
-    fs.readFile(`data/${name}.json`, (err, data) => {
+    fs.readFile(`data/${descriptor.name}.json`, (err, data) => {
       if (err) {
         observer.error(err);
       }
@@ -37,7 +37,7 @@ function search<E extends Entity>(
     });
   });
 
-  return applyFilter(data$, filter);
+  return applyFilter(descriptor, data$, filter);
 }
 
 function post<E extends Entity>(
@@ -95,4 +95,14 @@ function accessFile<E extends Entity>(name: string) {
 
 function generateFileName(name: string) {
   return `data/${name}.json`;
+}
+
+function applyFilter<E extends Entity>(
+  descriptor: ResourceDescriptor<E>,
+  data$: Observable<EntityList<E>>,
+  filter: Filter
+): Observable<EntityList<E>> {
+  return data$.pipe(
+    map(items => items.filter(item => descriptor.filter(item, filter)))
+  );
 }

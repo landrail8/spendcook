@@ -1,6 +1,5 @@
-import serializeFilter from "../../utils/serializeFilter";
 import { Observable, of, ReplaySubject } from "rxjs";
-import { tap } from "rxjs/operators";
+import { switchMap, tap } from "rxjs/operators";
 import {
   Filter,
   ResourceDescriptor,
@@ -67,7 +66,29 @@ export default class CacheDriver implements ResourceDriver {
     descriptor: ResourceDescriptor<E>,
     entities: E[]
   ): Observable<EntityList<E>> {
-    return this.origin.post(descriptor, entities);
+    const originEntities$ = this.origin.post(descriptor, entities);
+
+    return originEntities$.pipe(
+      tap(entities => {
+        this.cacheEntities(descriptor, entities);
+
+        for (const entity of entities) {
+          this.entities[generateEntityKey(descriptor, entity.id)] = entity;
+        }
+
+        const searchKeys = Object.keys(this.searches);
+
+        for (const key of searchKeys) {
+          const search = this.searches[key];
+
+          if (search.result$) {
+            search.isStale = true;
+          } else {
+            delete this.searches[key];
+          }
+        }
+      })
+    );
   }
 
   async release(): Promise<SerializableData> {
@@ -102,12 +123,12 @@ export default class CacheDriver implements ResourceDriver {
   ) {
     const { searches } = this;
     const key = generateSearchKey(descriptor, filter);
-    console.log(key, searches[key] ? "found" : "not found");
 
     if (!searches[key]) {
       searches[key] = {
         descriptor,
-        filter
+        filter,
+        isStale: false
       };
     }
 
@@ -124,14 +145,21 @@ export default class CacheDriver implements ResourceDriver {
 
     originResult$
       .pipe(
-        tap(items => {
-          record.idList = this.cacheEntities(descriptor, items);
+        tap(() => {
           delete record.result$;
-
           this.pendingSearchCount--;
           if (this.resolveRelease && this.pendingSearchCount === 0) {
             this.resolveRelease();
           }
+        }),
+        switchMap(items => {
+          if (record.isStale) {
+            record.isStale = false;
+            return this.searchByOrigin(record);
+          }
+
+          record.idList = this.cacheEntities(descriptor, items);
+          return of(items);
         })
       )
       .subscribe(result$);
@@ -155,6 +183,7 @@ export default class CacheDriver implements ResourceDriver {
 
   private serialize() {
     const { searches, entities } = this;
+
     return {
       searches,
       entities

@@ -7,6 +7,7 @@ export interface SearchRecord<E extends Entity> {
   filter: Filter;
   result$?: Observable<EntityList<E>>;
   idList?: string[];
+  isStale: boolean;
 }
 
 export type SearchRegistry = Registry<SearchRecord<Entity>>;

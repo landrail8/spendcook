@@ -17,10 +17,10 @@ export interface Resource<E extends Entity> {
 
 export interface ResourceDescriptor<E extends Entity> {
   name: string;
-  applyFilter: (
-    data$: Observable<EntityList<E>>,
-    options: Filter
-  ) => Observable<EntityList<E>>;
+  filter: (
+    entity: ExistingEntity<E>,
+    filter: Filter
+  ) => boolean;
 }
 
 export interface Filter {

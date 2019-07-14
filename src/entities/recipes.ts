@@ -8,28 +8,22 @@ export interface Recipe extends Entity {
 
 export const recipesDescriptor = describeResource<Recipe>({
   name: "recipes",
-  applyFilter(recipes$, filter) {
-    return recipes$.pipe(
-      map(items =>
-        items.filter(item => {
-          const filterQuery = filter.query && filter.query.toLocaleLowerCase();
-          const filterId = filter.id;
+  filter: (item, filter) => {
+    const filterQuery = filter.query && filter.query.toLocaleLowerCase();
+    const filterId = filter.id;
 
-          const itemTitle = item.title.toLocaleLowerCase();
-          const itemId = item.id.toString();
+    const itemTitle = item.title.toLocaleLowerCase();
+    const itemId = item.id.toString();
 
-          if (filterQuery && !itemTitle.includes(filterQuery)) {
-            return false;
-          }
+    if (filterQuery && !itemTitle.includes(filterQuery)) {
+      return false;
+    }
 
-          if (filterId && itemId !== filterId) {
-            return false;
-          }
+    if (filterId && itemId !== filterId) {
+      return false;
+    }
 
-          return true;
-        })
-      )
-    );
+    return true;
   }
 });
 
