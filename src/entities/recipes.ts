@@ -1,4 +1,3 @@
-import { map } from "rxjs/operators";
 import { Entity, Resource, describeResource, useResource } from "../resource";
 
 export interface Recipe extends Entity {

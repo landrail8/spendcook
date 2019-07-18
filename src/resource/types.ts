@@ -6,14 +6,7 @@ export interface Entity {
 
 export type ExistingEntity<E extends Entity> = E & { id: EntityId };
 export type EntityList<E extends Entity> = Array<ExistingEntity<E>>;
-
 export type EntityId = string;
-
-export interface Resource<E extends Entity> {
-  getById(id: string): Observable<ExistingEntity<E>>;
-  search(options: Filter): Observable<EntityList<E>>;
-  post(entities: E[]): Observable<EntityList<E>>;
-}
 
 export interface ResourceDescriptor<E extends Entity> {
   name: string;

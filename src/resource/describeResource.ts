@@ -1,4 +1,4 @@
-import { Dictionary, Entity, ResourceDescriptor } from "./types";
+import { Entity, ResourceDescriptor } from "./types";
 import descriptorRegistry from "./descriptorRegistry";
 
 export default function describeResource<E extends Entity>(
