@@ -1,25 +1,26 @@
 import * as React from "react";
-import { Entity, ResourceDescriptor, ResourceDriver } from "./types";
+import { Entity, ResourceDescriptor } from "./types";
 import { useContext } from "react";
-import makeResource from "./makeResource";
+import { ResourceMap } from "./mapResources";
+import Resource from "./Resource";
 
-const context = React.createContext<ResourceDriver | null>(null);
+const context = React.createContext<ResourceMap | null>(null);
 
 interface Props {
-  driver: ResourceDriver;
+  map: ResourceMap;
   children: JSX.Element;
 }
 
-export function ResourceProvider({ driver, children }: Props) {
+export function ResourceProvider({ map, children }: Props) {
   const { Provider } = context;
 
-  return <Provider value={driver}>{children}</Provider>;
+  return <Provider value={map}>{children}</Provider>;
 }
 
 export function useResource<E extends Entity>(
   descriptor: ResourceDescriptor<E>
 ) {
-  const driver = useContext(context);
+  const map = useContext(context);
 
-  return makeResource(driver!, descriptor);
+  return map!.get(descriptor) as Resource<E>;
 }

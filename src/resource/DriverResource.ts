@@ -4,9 +4,9 @@ import Resource from "./Resource";
 export default class DriverResource<E extends Entity> extends Resource<E> {
   constructor(
     private driver: ResourceDriver,
-    private descriptor: ResourceDescriptor<E>
+    descriptor: ResourceDescriptor<E>
   ) {
-    super();
+    super(descriptor);
   }
 
   search(filter: Filter) {

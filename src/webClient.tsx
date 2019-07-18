@@ -10,18 +10,21 @@ import {
 import { ThemeProvider } from "@material-ui/styles";
 import createTheme from "./theme/createTheme";
 import { useEffect } from "react";
-import { ResourceProvider } from "./resource";
+import { makeResource, ResourceProvider } from "./resource";
 import { makeFetchDriver } from "./resource/driver/fetch";
 import { makeCacheDriver, SerializableData } from "./resource/driver/cache";
+import mapResources from "./resource/mapResources";
+import { recipesDescriptor } from "./entities/recipes";
 
 const theme = createTheme();
 const cacheData: SerializableData = JSON.parse(
   document.getElementById(CACHE_CONTAINER_ID)!.innerText
 );
 const driver = makeCacheDriver(makeFetchDriver(), cacheData);
+const map = mapResources(makeResource(driver, recipesDescriptor));
 
 hydrate(
-  <ResourceProvider driver={driver}>
+  <ResourceProvider map={map}>
     <Router>
       <ThemeProvider theme={theme}>
         <AppWrapper />

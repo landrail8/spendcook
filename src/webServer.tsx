@@ -6,20 +6,25 @@ import { ServerStyleSheets, ThemeProvider } from "@material-ui/styles";
 import App from "./app/App";
 import generateHtml from "./utils/generateHtml";
 import createTheme from "./theme/createTheme";
-import { ResourceProvider } from "./resource";
+import { makeResource, ResourceProvider } from "./resource";
 import { makeFsDriver } from "./resource/driver/fs";
 import { makeCacheDriver } from "./resource/driver/cache";
 import makeApiMiddleware from "./resource/makeApiMiddleware";
+import mapResources from "./resource/mapResources";
+import { recipesDescriptor } from "./entities/recipes";
 
 const app = express();
-const fsDriver = makeFsDriver();
+
 const IS_DEV = process.env.NODE_ENV !== "production";
 
 if (IS_DEV) {
   app.use("/assets", express.static("dist"));
 }
 
-app.use("/api", makeApiMiddleware(fsDriver));
+const fsDriver = makeFsDriver();
+const resourceMap = mapResources(makeResource(fsDriver, recipesDescriptor));
+
+app.use("/api", makeApiMiddleware(resourceMap));
 
 app.get("*", async function(req, res) {
   console.log("request:", req.path);
@@ -36,8 +41,10 @@ app.get("*", async function(req, res) {
     // Создаем тему
     const theme = createTheme();
 
+    const resourceMap = mapResources(makeResource(cacheDriver, recipesDescriptor));
+
     return sheets.collect(
-      <ResourceProvider driver={cacheDriver}>
+      <ResourceProvider map={resourceMap}>
         <Router location={req.url} context={routerContext}>
           <ThemeProvider theme={theme}>
             <App />

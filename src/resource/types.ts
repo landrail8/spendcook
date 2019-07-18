@@ -10,10 +10,7 @@ export type EntityId = string;
 
 export interface ResourceDescriptor<E extends Entity> {
   name: string;
-  filter: (
-    entity: ExistingEntity<E>,
-    filter: Filter
-  ) => boolean;
+  filter: (entity: ExistingEntity<E>, filter: Filter) => boolean;
 }
 
 export interface Filter {
