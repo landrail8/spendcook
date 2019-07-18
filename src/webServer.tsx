@@ -6,9 +6,8 @@ import { ServerStyleSheets, ThemeProvider } from "@material-ui/styles";
 import App from "./app/App";
 import generateHtml from "./utils/generateHtml";
 import createTheme from "./theme/createTheme";
-import { makeResource, ResourceProvider } from "./resource";
+import { makeResource, ResourceCache, ResourceProvider } from "./resource";
 import { makeFsDriver } from "./resource/driver/fs";
-import { makeCacheDriver } from "./resource/driver/cache";
 import makeApiMiddleware from "./resource/makeApiMiddleware";
 import mapResources from "./resource/mapResources";
 import { recipesDescriptor } from "./entities/recipes";
@@ -35,13 +34,15 @@ app.get("*", async function(req, res) {
   // StaticRouter context
   const routerContext = {};
 
-  const cacheDriver = makeCacheDriver(fsDriver);
+  const resourceCache = new ResourceCache(
+    makeResource(fsDriver, recipesDescriptor)
+  );
 
   const makeJsx = (sheets: ServerStyleSheets) => {
     // Создаем тему
     const theme = createTheme();
 
-    const resourceMap = mapResources(makeResource(cacheDriver, recipesDescriptor));
+    const resourceMap = mapResources(resourceCache);
 
     return sheets.collect(
       <ResourceProvider map={resourceMap}>
@@ -58,7 +59,7 @@ app.get("*", async function(req, res) {
   renderToString(makeJsx(new ServerStyleSheets()));
 
   // Ждем сбора данных
-  const cacheData = await cacheDriver.release();
+  const cacheData = await resourceCache.release();
 
   // Рендерим повторно с данными
   const markup = renderToString(makeJsx(sheets));

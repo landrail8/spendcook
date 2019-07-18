@@ -3,12 +3,11 @@ import {
   CACHE_CONTAINER_ID,
   STYLES_CONTAINER_ID
 } from "../constants";
-import { SerializableData } from "../resource/driver/cache";
 
 interface Options {
   markup: string;
   css: string;
-  cacheData: SerializableData;
+  cacheData: any;
 }
 
 export default function generateHtml({ markup, css, cacheData }: Options) {
