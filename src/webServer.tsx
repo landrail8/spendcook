@@ -6,11 +6,11 @@ import { ServerStyleSheets, ThemeProvider } from "@material-ui/styles";
 import App from "./app/App";
 import generateHtml from "./utils/generateHtml";
 import createTheme from "./theme/createTheme";
-import { makeResource, ResourceCache, ResourceProvider } from "./resource";
-import { makeFsDriver } from "./resource/driver/fs";
+import { ResourceCache, ResourceProvider } from "./resource";
 import makeApiMiddleware from "./resource/makeApiMiddleware";
 import mapResources from "./resource/mapResources";
 import { recipesDescriptor } from "./entities/recipes";
+import ResourceFs from "./resource/ResourceFs";
 
 const app = express();
 
@@ -20,8 +20,8 @@ if (IS_DEV) {
   app.use("/assets", express.static("dist"));
 }
 
-const fsDriver = makeFsDriver();
-const resourceMap = mapResources(makeResource(fsDriver, recipesDescriptor));
+const recipes = new ResourceFs(recipesDescriptor);
+const resourceMap = mapResources(recipes);
 
 app.use("/api", makeApiMiddleware(resourceMap));
 
@@ -34,18 +34,14 @@ app.get("*", async function(req, res) {
   // StaticRouter context
   const routerContext = {};
 
-  const resourceCache = new ResourceCache(
-    makeResource(fsDriver, recipesDescriptor)
-  );
+  const recipesCache = new ResourceCache(recipes);
 
   const makeJsx = (sheets: ServerStyleSheets) => {
     // Создаем тему
     const theme = createTheme();
 
-    const resourceMap = mapResources(resourceCache);
-
     return sheets.collect(
-      <ResourceProvider map={resourceMap}>
+      <ResourceProvider map={mapResources(recipesCache)}>
         <Router location={req.url} context={routerContext}>
           <ThemeProvider theme={theme}>
             <App />
@@ -59,7 +55,7 @@ app.get("*", async function(req, res) {
   renderToString(makeJsx(new ServerStyleSheets()));
 
   // Ждем сбора данных
-  const cacheData = await resourceCache.release();
+  const cacheData = await recipesCache.release();
 
   // Рендерим повторно с данными
   const markup = renderToString(makeJsx(sheets));

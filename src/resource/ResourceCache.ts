@@ -1,17 +1,14 @@
 import { Observable, of, ReplaySubject } from "rxjs";
 import { switchMap, tap } from "rxjs/operators";
-import {
-  Filter,
-  EntityRegistry,
-  SearchRecord,
-  SearchRegistry,
-  SerializableData,
-  Entity,
-  EntityList
-} from "./types";
+import { Filter, Entity, EntityList, ExistingEntity } from "./types";
 import isGetOneByIdFilter from "./isGetOneByIdFilter";
-import Resource from "../Resource";
-import serializeFilter from "../utils/serializeFilter";
+import Resource from "./Resource";
+import serializeFilter from "./serializeFilter";
+
+export interface SerializableData<E extends Entity> {
+  searches: SearchRegistry<E>;
+  entities: EntityRegistry<E>;
+}
 
 export default class ResourceCache<E extends Entity> extends Resource<E> {
   constructor(
@@ -160,4 +157,18 @@ export default class ResourceCache<E extends Entity> extends Resource<E> {
       entities
     };
   }
+}
+
+interface SearchRecord<E extends Entity> {
+  filter: Filter;
+  result$?: Observable<EntityList<E>>;
+  idList?: string[];
+  isStale: boolean;
+}
+
+type SearchRegistry<E extends Entity> = Registry<SearchRecord<E>>;
+type EntityRegistry<E extends Entity> = Registry<ExistingEntity<E>>;
+
+export interface Registry<T> {
+  [key: string]: T;
 }

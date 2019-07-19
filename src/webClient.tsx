@@ -10,9 +10,9 @@ import {
 import { ThemeProvider } from "@material-ui/styles";
 import createTheme from "./theme/createTheme";
 import { useEffect } from "react";
-import { makeResource, ResourceCache, ResourceProvider } from "./resource";
-import { makeFetchDriver } from "./resource/driver/fetch";
+import { ResourceCache, ResourceProvider } from "./resource";
 import mapResources from "./resource/mapResources";
+import ResourceFetch from "./resource/ResourceFetch";
 import { recipesDescriptor } from "./entities/recipes";
 
 const theme = createTheme();
@@ -23,10 +23,7 @@ const cacheData = JSON.parse(
 hydrate(
   <ResourceProvider
     map={mapResources(
-      new ResourceCache(
-        makeResource(makeFetchDriver(), recipesDescriptor),
-        cacheData
-      )
+      new ResourceCache(new ResourceFetch(recipesDescriptor), cacheData)
     )}
   >
     <Router>
