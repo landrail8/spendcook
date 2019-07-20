@@ -61,17 +61,21 @@ export default class ResourceCache<E extends Entity> extends Resource<E> {
           this.entities[entity.id] = entity;
         }
 
-        const searchKeys = Object.keys(this.searches);
+        this.resetCache();
+      })
+    );
+  }
 
-        for (const key of searchKeys) {
-          const search = this.searches[key];
+  delete(filter) {
+    const delete$ = this.origin.delete(filter);
 
-          if (search.result$) {
-            search.isStale = true;
-          } else {
-            delete this.searches[key];
-          }
+    return delete$.pipe(
+      tap(() => {
+        for (const { id } of this.searchEntities(filter)) {
+          delete this.entities[id];
         }
+
+        this.resetCache();
       })
     );
   }
@@ -92,6 +96,26 @@ export default class ResourceCache<E extends Entity> extends Resource<E> {
   private resolveRelease: null | (() => void) = null;
   private readonly entities: EntityRegistry<E>;
   private readonly searches: SearchRegistry<E>;
+
+  private searchEntities(filter: Filter) {
+    return Object.values(this.entities).filter(entity =>
+      this.descriptor.filter(entity, filter)
+    );
+  }
+
+  private resetCache() {
+    const searchKeys = Object.keys(this.searches);
+
+    for (const key of searchKeys) {
+      const search = this.searches[key];
+
+      if (search.result$) {
+        search.isStale = true;
+      } else {
+        delete this.searches[key];
+      }
+    }
+  }
 
   private getSearchRecord(filter: Filter) {
     const { searches } = this;

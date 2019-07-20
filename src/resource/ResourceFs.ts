@@ -1,6 +1,6 @@
 import { Observable } from "rxjs";
 import * as fs from "fs";
-import { map, mergeMap } from "rxjs/operators";
+import { map, mapTo, mergeMap } from "rxjs/operators";
 import {
   Entity,
   EntityList,
@@ -16,37 +16,42 @@ export default class ResourceFs<E extends Entity> extends Resource<E> {
   }
 
   search(filter: Filter) {
-    return this.applyFilter(this.accessFile(), filter);
+    return this.applyFilter(this.readFile(), filter);
   }
 
   post(entities: E[]) {
-    return this.accessFile().pipe(
-      mergeMap(
-        items =>
-          new Observable<EntityList<E>>(observer => {
-            let id = items
-              .map(({ id }) => parseInt(id))
-              .reduce((acc, value) => (acc > value ? acc : value));
+    return this.readFile().pipe(
+      mergeMap(existingItems => {
+        let nextId = existingItems
+          .map(({ id }) => parseInt(id))
+          .reduce((acc, value) => (acc > value ? acc : value));
 
-            const data = entities.map<ExistingEntity<E>>(entity => ({
-              ...entity,
-              id: `${++id}`
-            }));
+        const newItems = entities.map<ExistingEntity<E>>(entity => ({
+          ...entity,
+          id: `${++nextId}`
+        }));
 
-            fs.writeFile(
-              this.filename,
-              JSON.stringify([...items, ...data], null, 2),
-              err => {
-                if (err) {
-                  observer.error(err);
-                } else {
-                  observer.next(data);
-                }
+        return this.writeFile([...existingItems, ...newItems]).pipe(
+          mapTo(newItems)
+        );
+      })
+    );
+  }
 
-                observer.complete();
-              }
-            );
-          })
+  delete(filter) {
+    return this.readFile().pipe(
+      mergeMap(existingItems =>
+        this.writeFile(
+          existingItems.filter(
+            entity => {
+              const isDeleting = !this.descriptor.filter(entity, filter)
+
+              console.log(isDeleting, filter)
+
+              return isDeleting
+            }
+          )
+        )
       )
     );
   }
@@ -55,7 +60,7 @@ export default class ResourceFs<E extends Entity> extends Resource<E> {
     return `data/${this.descriptor.name}.json`;
   }
 
-  accessFile() {
+  readFile() {
     return new Observable<EntityList<E>>(observer => {
       fs.readFile(this.filename, (err, data) => {
         if (err) {
@@ -66,6 +71,20 @@ export default class ResourceFs<E extends Entity> extends Resource<E> {
           observer.next(JSON.parse(data.toString()));
         } catch (err) {
           observer.error(err);
+        }
+
+        observer.complete();
+      });
+    });
+  }
+
+  writeFile(data: EntityList<E>) {
+    return new Observable<void>(observer => {
+      fs.writeFile(this.filename, JSON.stringify(data, null, 2), err => {
+        if (err) {
+          observer.error(err);
+        } else {
+          observer.next();
         }
 
         observer.complete();
