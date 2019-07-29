@@ -1,6 +1,13 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
-import { IconButton } from "@material-ui/core";
+import {
+  Container,
+  IconButton,
+  Table,
+  TableCell,
+  TableRow,
+  Typography
+} from "@material-ui/core";
 import useRxjs from "use-rxjs";
 import { useRecipes } from "../../entities/recipes";
 import HeaderTitle from "../../components/Header/HeaderTitle";
@@ -13,6 +20,30 @@ interface Props extends RouteComponentProps<RouteParams> {}
 interface RouteParams {
   id: string;
 }
+
+interface Ingridient {
+  name: string;
+  count: string;
+}
+
+const ingridients: Ingridient[] = [
+  {
+    name: "Рисовая крупа",
+    count: "1 стакан"
+  },
+  {
+    name: "Вода",
+    count: "2 стакана"
+  },
+  {
+    name: "Молоко",
+    count: "2 стакана"
+  },
+  {
+    name: "Сливочное масло",
+    count: "4 ст. ложки"
+  }
+];
 
 export default function Recipe({ match, history }: Props) {
   const { id } = match!.params;
@@ -39,7 +70,27 @@ export default function Recipe({ match, history }: Props) {
           <DeleteIcon />
         </IconButton>
       </Header>
-      {description}
+      <Container>
+        <Typography variant="h6" style={{ marginTop: 16 }}>
+          Ингридиенты
+        </Typography>
+        <Table>
+          {ingridients.map(({ name, count }) => (
+            <TableRow key={name}>
+              <TableCell component="th" scope="row">
+                {name}
+              </TableCell>
+              <TableCell align="right">{count}</TableCell>
+            </TableRow>
+          ))}
+        </Table>
+        <Typography variant="h6" style={{ marginTop: 16 }}>
+          Инструкция
+        </Typography>
+        {description.split("\n").map((text, key) => (
+          <p key={key}>{text}</p>
+        ))}
+      </Container>
     </>
   );
 }
