@@ -4,6 +4,7 @@
   "description": "Web version",
   "main": "index.js",
   "scripts": {
+    "storybook": "start-storybook",
     "start": "npm run start-webpack & npm run start-server",
     "start-server": "tsc && nodemon --watch src --watch node_modules 'src/webServer.js'",
     "start-webpack": "webpack -w",
@@ -21,15 +22,19 @@
     "mongodb": "^3.2.7",
     "query-string": "^6.2.0",
     "react": "^16.8.2",
-    "react-dom": "^16.8.2",
+    "react-dom": "^16.8.6",
     "react-jss": "^8.6.1",
     "react-router-dom": "^4.3.1",
     "recompose": "^0.30.0",
     "rxjs": "^6.4.0",
     "styled-components": "^4.3.2",
-    "use-rxjs": "0.0.2"
+    "use-rxjs": "0.0.4"
   },
   "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.3.3",
+    "@storybook/react": "^5.1.10",
     "@types/express": "^4.16.0",
     "@types/jss": "^9.5.7",
     "@types/node": "^10.12.12",
@@ -39,6 +44,8 @@
     "@types/react-jss": "^8.6.0",
     "@types/react-router-dom": "^4.3.1",
     "@types/recompose": "^0.30.2",
+    "@types/styled-components": "^4.1.18",
+    "babel-loader": "^8.0.6",
     "nodemon": "^1.18.7",
     "prettier": "^1.16.4",
     "ts-loader": "^5.3.1",
