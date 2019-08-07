@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as express from "express";
+import { ServerStyleSheet } from "styled-components";
 import { StaticRouter as Router } from "react-router-dom";
 import { renderToString } from "react-dom/server";
 import { ServerStyleSheets, ThemeProvider } from "@material-ui/styles";
@@ -30,45 +31,54 @@ app.get("*", async function(req, res) {
 
   // Создаем JSS копилку стилей
   const sheets = new ServerStyleSheets();
+  const styleSheet = new ServerStyleSheet();
 
   // StaticRouter context
   const routerContext = {};
 
   const recipesCache = new ResourceCache(recipes);
 
-  const makeJsx = (sheets: ServerStyleSheets) => {
+  const render = (sheets: ServerStyleSheets, styleSheet: ServerStyleSheet) => {
     // Создаем тему
     const theme = createTheme();
 
-    return sheets.collect(
-      <ResourceProvider map={mapResources(recipesCache)}>
-        <Router location={req.url} context={routerContext}>
-          <ThemeProvider theme={theme}>
-            <App />
-          </ThemeProvider>
-        </Router>
-      </ResourceProvider>
+    return renderToString(
+      styleSheet.collectStyles(
+        sheets.collect(
+          <ResourceProvider map={mapResources(recipesCache)}>
+            <Router location={req.url} context={routerContext}>
+              <ThemeProvider theme={theme}>
+                <App />
+              </ThemeProvider>
+            </Router>
+          </ResourceProvider>
+        )
+      )
     );
   };
 
   // Запускаем процесс сбора требований
-  renderToString(makeJsx(new ServerStyleSheets()));
+  render(new ServerStyleSheets(), new ServerStyleSheet());
 
   // Ждем сбора данных
   const cacheData = await recipesCache.release();
 
   // Рендерим повторно с данными
-  const markup = renderToString(makeJsx(sheets));
+  const markup = render(sheets, styleSheet);
 
   // Достаем CSS из JSS копилки
-  const css = sheets.toString();
+  const css = sheets.toString()
+
+  // Достаем CSS из JSS копилки
+  const styles = styleSheet.getStyleTags();
 
   // Отправляем html клиенту
   res.send(
     generateHtml({
       cacheData,
       markup,
-      css
+      css,
+      styles
     })
   );
 });

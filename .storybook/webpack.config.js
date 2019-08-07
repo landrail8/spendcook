@@ -9,5 +9,7 @@ module.exports = ({ config }) => {
     }
   });
 
+  config.resolve.extensions = [".ts", ".tsx", ...config.resolve.extensions];
+
   return config;
 };

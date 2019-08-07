@@ -8,11 +8,13 @@ import Menu from "./menu/Menu";
 import Stock from "./stock/Stock";
 import Shopping from "./shopping/Shopping";
 import RecipeForm from "./recipe_form/RecipeForm";
+import { GlobalStyle } from "../ui";
 
 export default function App() {
   return (
     <>
       <CssBaseline />
+      <GlobalStyle/>
       <Switch>
         <Route path="/" exact component={Recipes} />
         <Route path="/recipes" exact component={Recipes} />
