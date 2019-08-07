@@ -1,12 +1,11 @@
 import * as React from "react";
 import { useRecipes } from "../../entities/recipes";
-import Header from "../../components/Header/Header";
-import HeaderBack from "../../components/Header/HeaderBack";
-import HeaderTitle from "../../components/Header/HeaderTitle";
+import { Header, HeaderButton, HeaderTitle } from "../../ui";
 import useInput from "../../hooks/useInput";
 import TextField from "./TextField";
 import { Button, Paper } from "@material-ui/core";
 import { RouteComponentProps } from "react-router";
+import { BackButton } from "../../components";
 
 interface Props extends RouteComponentProps {}
 
@@ -14,8 +13,8 @@ export default function RecipeForm({ history }: Props) {
   const recipes = useRecipes();
   const [title, onTitleChange] = useInput("");
   const [description, onDescriptionChange] = useInput("");
-  const onSubmit: React.FormEventHandler = (e) => {
-    e.preventDefault()
+  const onSubmit: React.FormEventHandler = e => {
+    e.preventDefault();
     const newRecipe$ = recipes
       .post([
         {
@@ -31,7 +30,7 @@ export default function RecipeForm({ history }: Props) {
   return (
     <>
       <Header>
-        <HeaderBack />
+        <HeaderButton as={BackButton} />
         <HeaderTitle style={{ marginLeft: 32 }}>Добавить рецепт</HeaderTitle>
       </Header>
       <Paper

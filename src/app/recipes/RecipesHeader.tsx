@@ -1,12 +1,10 @@
-import { IconButton, InputBase, Typography } from "@material-ui/core";
-import { ArrowBack, Search } from "@material-ui/icons";
 import * as React from "react";
 import { useCallback } from "react";
 import { BehaviorSubject } from "rxjs";
 import useRxjs from "use-rxjs";
-import Header from "../../components/Header/Header";
-import HeaderTitle from "../../components/Header/HeaderTitle";
-import HeaderBack from "../../components/Header/HeaderBack";
+import { Header, HeaderButton, HeaderInput, HeaderTitle } from "../../ui";
+import { BackButton } from "../../components";
+import { Search as SearchIcon } from "@material-ui/icons";
 
 interface Props {
   searchQuery$: BehaviorSubject<SearchQuery>;
@@ -23,27 +21,20 @@ export default function RecipesHeader({ searchQuery$ }: Props) {
   const onEnableSearching = useCallback(() => onSearch(""), [onSearch]);
   const onDisableSearching = useCallback(() => onSearch(null), [onSearch]);
 
-  return (
+  return searchQuery !== null ? (
     <Header>
-      {searchQuery !== null ? (
-        <>
-          <HeaderBack onClick={onDisableSearching} />
-          <InputBase
-            autoFocus
-            value={searchQuery}
-            onChange={e => onSearch(e.target.value)}
-            placeholder="Поиск…"
-            style={{ color: "white", marginLeft: 32 }}
-          />
-        </>
-      ) : (
-        <>
-          <HeaderTitle>Рецепты</HeaderTitle>
-          <IconButton onClick={onEnableSearching} color="inherit">
-            <Search />
-          </IconButton>
-        </>
-      )}
+      <HeaderButton as={BackButton} onClick={onDisableSearching} />
+      <HeaderInput
+        autoFocus
+        value={searchQuery}
+        onChange={e => onSearch(e.target.value)}
+        placeholder="Поиск…"
+      />
+    </Header>
+  ) : (
+    <Header>
+      <HeaderTitle>Рецепты</HeaderTitle>
+      <HeaderButton onClick={onEnableSearching} children={<SearchIcon />} />
     </Header>
   );
 }

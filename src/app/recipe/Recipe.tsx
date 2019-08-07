@@ -10,10 +10,9 @@ import {
 } from "@material-ui/core";
 import useRxjs from "use-rxjs";
 import { useRecipes } from "../../entities/recipes";
-import HeaderTitle from "../../components/Header/HeaderTitle";
-import HeaderBack from "../../components/Header/HeaderBack";
+import { BackButton } from "../../components";
 import { Delete as DeleteIcon } from "@material-ui/icons";
-import Header from "../../components/Header/Header";
+import { HeaderButton, HeaderTitle, Header } from "../../ui";
 
 interface Props extends RouteComponentProps<RouteParams> {}
 
@@ -64,7 +63,7 @@ export default function Recipe({ match, history }: Props) {
   return (
     <>
       <Header>
-        <HeaderBack />
+        <HeaderButton as={BackButton} />
         <HeaderTitle style={{ marginLeft: 32 }}>{title}</HeaderTitle>
         <IconButton onClick={onDelete} color="inherit">
           <DeleteIcon />
