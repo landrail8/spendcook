@@ -28,6 +28,7 @@
     "recompose": "^0.30.0",
     "rxjs": "^6.4.0",
     "styled-components": "^4.3.2",
+    "use-resize-observer": "^4.0.0",
     "use-rxjs": "0.0.4"
   },
   "devDependencies": {
