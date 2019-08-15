@@ -25,6 +25,7 @@ export const HeaderTitle = styled.h6`
   line-height: 56px;
   margin: 0;
   padding: 0;
+  flex-grow: 1;
 `;
 
 export const HeaderInput = styled.input`

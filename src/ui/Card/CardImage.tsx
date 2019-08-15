@@ -1,19 +1,12 @@
 import * as React from "react";
 import * as S from "./styled";
-import useResizeObserver from "use-resize-observer";
 
-type Props = React.ComponentProps<typeof S.CardImage>;
+type Props = React.ImgHTMLAttributes<HTMLElement>;
 
-export default function Card(props: Props) {
-  const [imageRef, imageWidth] = useResizeObserver<HTMLDivElement>();
-
+export default function Card({ className, style, alt, src, ...props }: Props) {
   return (
-    <S.CardImage
-      ref={imageRef}
-      style={{
-        height: imageWidth / 2.4
-      }}
-      {...props}
-    />
+    <S.CardImage className={className} style={style} {...props}>
+      {src && <img src={src} alt={alt} />}
+    </S.CardImage>
   );
 }

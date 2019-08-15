@@ -1,8 +1,10 @@
 import styled from "styled-components";
 
-export const Card = styled.div`
+export const Card = styled.a`
+  position: relative;
+  text-decoration: none;
+  display: block;
   padding: 0 16px;
-  margin: 8px;
   border-radius: 4px;
   overflow: hidden;
   box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2),
@@ -14,12 +16,17 @@ export const CardImage = styled.figure`
   align-items: center;
   background: dimgrey;
   border: 0;
-  padding: 0;
+  padding-top: 60%;
   margin: 0 -16px;
   box-sizing: border-box;
   overflow: hidden;
+  position: relative;
   
   img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
     object-fit: cover;
     width: 100%;
   }

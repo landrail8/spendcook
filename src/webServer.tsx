@@ -1,5 +1,5 @@
-import * as React from "react";
-import * as express from "express";
+import React from "react";
+import express from "express";
 import { ServerStyleSheet } from "styled-components";
 import { StaticRouter as Router } from "react-router-dom";
 import { renderToString } from "react-dom/server";

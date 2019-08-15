@@ -1,6 +1,13 @@
 import * as React from "react";
 import { Recipe } from "../../entities/recipes";
-import * as S from "./styled";
+import {
+  Card,
+  CardImage,
+  CardTitle,
+  Collection,
+  CollectionItem
+} from "../../ui";
+import { Link } from "react-router-dom";
 
 interface Props {
   items: Recipe[];
@@ -8,14 +15,15 @@ interface Props {
 
 export default function RecipesList({ items }: Props) {
   return (
-    <S.List>
+    <Collection>
       {items.map(({ id, title }) => (
-        <S.ListItem key={id}>
-          <S.ListLink to={`/recipes/${id}`}>
-            <S.ListTitle>{title}</S.ListTitle>
-          </S.ListLink>
-        </S.ListItem>
+        <CollectionItem key={id}>
+          <Card as={Link} to={`/recipes/${id}`}>
+            <CardImage />
+            <CardTitle>{title}</CardTitle>
+          </Card>
+        </CollectionItem>
       ))}
-    </S.List>
+    </Collection>
   );
 }
