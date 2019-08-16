@@ -1,33 +1,35 @@
 import * as React from "react";
-import { Link } from "react-router-dom";
-import { BottomNavigation, BottomNavigationAction } from "@material-ui/core";
-import withRouteContext, { RouteContextProps } from "../hocs/withRouteContext";
+import { NavLink } from "react-router-dom";
+import { BottomNavigation, BottomNavigationAction } from "../ui";
+import { Book, Assignment, Kitchen, ShoppingCart } from "@material-ui/icons";
 
-interface Props extends RouteContextProps {}
-
-function Navigation({ index: value, routes }: Props) {
+export default function Navigation() {
   return (
-    <BottomNavigation
-      style={{
-        width: "100%",
-        position: "fixed",
-        bottom: 0
-      }}
-      value={value}
-      showLabels
-    >
-      {routes.map(({ path, label, icon: IconComponent }, value) => (
-        <BottomNavigationAction
-          key={value}
-          value={value}
-          label={label}
-          icon={<IconComponent />}
-          component={Link}
-          to={path}
-        />
-      ))}
+    <BottomNavigation>
+      <BottomNavigationAction
+        as={NavLink}
+        icon={<Book />}
+        label="Рецепты"
+        to="/recipes"
+      />
+      <BottomNavigationAction
+        as={NavLink}
+        icon={<Assignment />}
+        label="Меню"
+        to="/menu"
+      />
+      <BottomNavigationAction
+        as={NavLink}
+        icon={<Kitchen />}
+        label="Остатки"
+        to="/stock"
+      />
+      <BottomNavigationAction
+        as={NavLink}
+        icon={<ShoppingCart />}
+        label="Покупки"
+        to="/shopping"
+      />
     </BottomNavigation>
   );
 }
-
-export default withRouteContext(Navigation);
