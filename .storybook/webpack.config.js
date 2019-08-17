@@ -4,7 +4,8 @@ module.exports = ({ config }) => {
     use: {
       loader: "babel-loader",
       options: {
-        presets: ["@babel/preset-typescript", "@babel/preset-react"]
+        presets: ["@babel/preset-typescript", "@babel/preset-react"],
+        plugins: ["@babel/plugin-proposal-class-properties"]
       }
     }
   });

@@ -3,9 +3,6 @@ import { RouteComponentProps } from "react-router";
 import {
   Container,
   IconButton,
-  Table,
-  TableCell,
-  TableRow,
   Typography
 } from "@material-ui/core";
 import useRxjs from "use-rxjs";
@@ -13,6 +10,7 @@ import { useRecipes } from "../../entities/recipes";
 import { BackButton } from "../../components";
 import { Delete as DeleteIcon } from "@material-ui/icons";
 import { HeaderButton, HeaderTitle, Header } from "../../ui";
+import * as S from "./styled";
 
 interface Props extends RouteComponentProps<RouteParams> {}
 
@@ -69,27 +67,27 @@ export default function Recipe({ match, history }: Props) {
           <DeleteIcon />
         </IconButton>
       </Header>
-      <Container>
-        <Typography variant="h6" style={{ marginTop: 16 }}>
-          Ингридиенты
-        </Typography>
-        <Table>
-          {ingridients.map(({ name, count }) => (
-            <TableRow key={name}>
-              <TableCell component="th" scope="row">
-                {name}
-              </TableCell>
-              <TableCell align="right">{count}</TableCell>
-            </TableRow>
+      <S.Container>
+        <S.Title>Ингридиенты</S.Title>
+        <S.IngridientList>
+          {ingridients.map(ingridient => (
+            <S.IngridientItem key={ingridient.name}>
+              {generateIngridientLine(ingridient)}
+            </S.IngridientItem>
           ))}
-        </Table>
-        <Typography variant="h6" style={{ marginTop: 16 }}>
-          Инструкция
-        </Typography>
+        </S.IngridientList>
+        <S.Title>Инструкция</S.Title>
         {description.split("\n").map((text, key) => (
-          <p key={key}>{text}</p>
+          <S.Description key={key}>{text}</S.Description>
         ))}
-      </Container>
+      </S.Container>
     </>
   );
+}
+
+function generateIngridientLine({ name, count }: Ingridient, size = 40) {
+  const dotsCount = size - name.length - count.length - 2;
+  const dots = new Array(dotsCount).fill(".").join("");
+
+  return `${name} ${dots} ${count}`;
 }
