@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.nav`
+  width: 100%;
   background: white;
   position: fixed;
   bottom: 0;
