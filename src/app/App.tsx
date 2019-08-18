@@ -1,5 +1,4 @@
 import * as React from "react";
-import { CssBaseline } from "@material-ui/core";
 import { Route, Switch } from "react-router";
 import Navigation from "./Navigation";
 import Recipes from "./recipes/Recipes";
@@ -13,7 +12,6 @@ import { GlobalStyle } from "../ui";
 export default function App() {
   return (
     <>
-      <CssBaseline />
       <GlobalStyle/>
       <Switch>
         <Route path="/" exact component={Recipes} />
