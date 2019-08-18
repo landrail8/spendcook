@@ -3,10 +3,8 @@ import express from "express";
 import { ServerStyleSheet } from "styled-components";
 import { StaticRouter as Router } from "react-router-dom";
 import { renderToString } from "react-dom/server";
-import { ServerStyleSheets, ThemeProvider } from "@material-ui/styles";
 import App from "./app/App";
 import generateHtml from "./utils/generateHtml";
-import createTheme from "./theme/createTheme";
 import { ResourceCache, ResourceProvider } from "./resource";
 import makeApiMiddleware from "./resource/makeApiMiddleware";
 import mapResources from "./resource/mapResources";
@@ -29,8 +27,7 @@ app.use("/api", makeApiMiddleware(resourceMap));
 app.get("*", async function(req, res) {
   console.log("request:", req.path);
 
-  // Создаем JSS копилку стилей
-  const sheets = new ServerStyleSheets();
+  // Создаем копилку стилей
   const styleSheet = new ServerStyleSheet();
 
   // StaticRouter context
@@ -38,38 +35,28 @@ app.get("*", async function(req, res) {
 
   const recipesCache = new ResourceCache(recipes);
 
-  const render = (sheets: ServerStyleSheets, styleSheet: ServerStyleSheet) => {
-    // Создаем тему
-    const theme = createTheme();
-
+  const render = (styleSheet: ServerStyleSheet) => {
     return renderToString(
       styleSheet.collectStyles(
-        sheets.collect(
-          <ResourceProvider map={mapResources(recipesCache)}>
-            <Router location={req.url} context={routerContext}>
-              <ThemeProvider theme={theme}>
-                <App />
-              </ThemeProvider>
-            </Router>
-          </ResourceProvider>
-        )
+        <ResourceProvider map={mapResources(recipesCache)}>
+          <Router location={req.url} context={routerContext}>
+            <App />
+          </Router>
+        </ResourceProvider>
       )
     );
   };
 
   // Запускаем процесс сбора требований
-  render(new ServerStyleSheets(), new ServerStyleSheet());
+  render(new ServerStyleSheet());
 
   // Ждем сбора данных
   const cacheData = await recipesCache.release();
 
   // Рендерим повторно с данными
-  const markup = render(sheets, styleSheet);
+  const markup = render(styleSheet);
 
-  // Достаем CSS из JSS копилки
-  const css = sheets.toString()
-
-  // Достаем CSS из JSS копилки
+  // Достаем CSS копилки
   const styles = styleSheet.getStyleTags();
 
   // Отправляем html клиенту
@@ -77,7 +64,6 @@ app.get("*", async function(req, res) {
     generateHtml({
       cacheData,
       markup,
-      css,
       styles
     })
   );

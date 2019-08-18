@@ -1,6 +1,11 @@
 import styled from "styled-components";
 
-export const Wrapper = styled.nav`
+export const StaticWrapper = styled.div`
+  margin-top: 16px;
+  height: 56px;
+`;
+
+export const FloatingWrapper = styled.nav`
   width: 100%;
   background: white;
   position: fixed;
@@ -31,5 +36,9 @@ export const Action = styled.a`
 `;
 export const Icon = styled.figure`
   margin: 0;
+  svg {
+    width: 24px;
+    height: 24px;
+  }
 `;
 export const Title = styled.span``;

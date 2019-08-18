@@ -18,8 +18,12 @@ export const HeaderButton = styled.button`
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  
+  svg {
+    width: 24px;
+    height: 24px;
+  }
 `;
-export const HeaderBack = styled.button``;
 export const HeaderTitle = styled.h6`
   font-size: 24px;
   line-height: 56px;

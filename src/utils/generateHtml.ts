@@ -1,19 +1,16 @@
 import {
   APP_CONTAINER_ID,
-  CACHE_CONTAINER_ID,
-  STYLES_CONTAINER_ID
+  CACHE_CONTAINER_ID
 } from "../constants";
 
 interface Options {
   markup: string;
-  css: string;
   cacheData: any;
   styles: string;
 }
 
 export default function generateHtml({
   markup,
-  css,
   cacheData,
   styles
 }: Options) {
@@ -27,7 +24,6 @@ export default function generateHtml({
           content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
         />
         <title>Title</title>
-        <style id="${STYLES_CONTAINER_ID}">${css}</style>
         ${styles}
     </head>
     <body>

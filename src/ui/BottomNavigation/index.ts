@@ -1,2 +1,2 @@
-export { Wrapper as BottomNavigation } from "./styled";
+export { default as BottomNavigation } from "./BottomNavigation";
 export { default as BottomNavigationAction } from "./BottomNavigationAction";

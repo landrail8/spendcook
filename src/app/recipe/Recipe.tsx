@@ -1,10 +1,5 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
-import {
-  Container,
-  IconButton,
-  Typography
-} from "@material-ui/core";
 import useRxjs from "use-rxjs";
 import { useRecipes } from "../../entities/recipes";
 import { BackButton } from "../../components";
@@ -63,9 +58,9 @@ export default function Recipe({ match, history }: Props) {
       <Header>
         <HeaderButton as={BackButton} />
         <HeaderTitle style={{ marginLeft: 32 }}>{title}</HeaderTitle>
-        <IconButton onClick={onDelete} color="inherit">
+        <HeaderButton onClick={onDelete}>
           <DeleteIcon />
-        </IconButton>
+        </HeaderButton>
       </Header>
       <S.Container>
         <S.Title>Ингридиенты</S.Title>

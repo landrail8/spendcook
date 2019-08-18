@@ -1,5 +1,4 @@
 import * as React from "react";
-import { CircularProgress } from "@material-ui/core";
 import { Observable } from "rxjs";
 import useRxjs from "use-rxjs";
 
@@ -27,7 +26,7 @@ export default function ListLoader<T>({ items$, component: Component }: Props<T>
           alignItems: "center"
         }}
       >
-        <CircularProgress />
+        Loading...
       </div>
     );
   }
