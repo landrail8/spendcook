@@ -16,9 +16,9 @@ interface Props {
 export default function RecipesList({ items }: Props) {
   return (
     <Collection>
-      {items.map(({ id, title }) => (
-        <CollectionItem key={id}>
-          <Card as={Link} to={`/recipes/${id}`}>
+      {items.map(({ _id, title }) => (
+        <CollectionItem key={_id}>
+          <Card as={Link} to={`/recipes/${_id}`}>
             <CardImage />
             <CardTitle>{title}</CardTitle>
           </Card>

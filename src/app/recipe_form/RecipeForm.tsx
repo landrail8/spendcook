@@ -23,7 +23,7 @@ export default function RecipeForm({ history }: Props) {
         }
       ])
       .subscribe(recipes => {
-        history.replace(`/recipes/${recipes[0].id}`);
+        history.replace(`/recipes/${recipes[0]._id}`);
       });
   };
 

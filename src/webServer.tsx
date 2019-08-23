@@ -9,7 +9,7 @@ import { ResourceCache, ResourceProvider } from "./resource";
 import makeApiMiddleware from "./resource/makeApiMiddleware";
 import mapResources from "./resource/mapResources";
 import { recipesDescriptor } from "./entities/recipes";
-import ResourceFs from "./resource/ResourceFs";
+import ResourceMongoDb from "./resource/ResourceMongoDb";
 
 const app = express();
 
@@ -19,7 +19,7 @@ if (IS_DEV) {
   app.use("/assets", express.static("dist"));
 }
 
-const recipes = new ResourceFs(recipesDescriptor);
+const recipes = new ResourceMongoDb(recipesDescriptor);
 const resourceMap = mapResources(recipes);
 
 app.use("/api", makeApiMiddleware(resourceMap));

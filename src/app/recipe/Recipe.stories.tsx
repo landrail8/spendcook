@@ -10,7 +10,7 @@ import { MemoryRouter } from "react-router";
 const resourceMap = mapResources(
   new ResourceMock(recipesDescriptor, [
     {
-      id: "1",
+      _id: "1",
       title: "Борщ",
       description: "Борщ любят в России"
     }

@@ -1,10 +1,10 @@
 import { Observable } from "rxjs";
 
 export interface Entity {
-  id?: EntityId;
+  _id?: EntityId;
 }
 
-export type ExistingEntity<E extends Entity> = E & { id: EntityId };
+export type ExistingEntity<E extends Entity> = E & { _id: EntityId };
 export type EntityList<E extends Entity> = Array<ExistingEntity<E>>;
 export type EntityId = string;
 
