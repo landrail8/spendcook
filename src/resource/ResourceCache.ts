@@ -58,7 +58,7 @@ export default class ResourceCache<E extends Entity> extends Resource<E> {
         this.cacheEntities(entities);
 
         for (const entity of entities) {
-          this.entities[entity.id] = entity;
+          this.entities[entity._id] = entity;
         }
 
         this.resetCache();
@@ -71,8 +71,8 @@ export default class ResourceCache<E extends Entity> extends Resource<E> {
 
     return delete$.pipe(
       tap(() => {
-        for (const { id } of this.searchEntities(filter)) {
-          delete this.entities[id];
+        for (const { _id } of this.searchEntities(filter)) {
+          delete this.entities[_id];
         }
 
         this.resetCache();
@@ -165,7 +165,7 @@ export default class ResourceCache<E extends Entity> extends Resource<E> {
 
   private cacheEntities(items: EntityList<E>) {
     return items.map(item => {
-      const itemId = item.id;
+      const itemId = item._id;
 
       this.entities[itemId] = item;
 

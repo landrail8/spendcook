@@ -12,7 +12,7 @@ export const recipesDescriptor = describeResource<Recipe>({
     const filterId = filter.id;
 
     const itemTitle = item.title.toLocaleLowerCase();
-    const itemId = item.id.toString();
+    const itemId = item._id.toString();
 
     if (filterQuery && !itemTitle.includes(filterQuery)) {
       return false;

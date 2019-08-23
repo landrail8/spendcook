@@ -10,7 +10,7 @@ import { MemoryRouter } from "react-router";
 const resourceMap = mapResources(
   new ResourceMock(recipesDescriptor, [
     {
-      id: "1",
+      _id: "1",
       title: "Борщ",
       description: "Борщ любят в России"
     }
@@ -26,7 +26,7 @@ const match: any = {
 const location: any = {};
 
 storiesOf("Recipe", module).add("Страница рецепта", () => (
-  <MemoryRouter initialEntries={["/recipes/1"]}>
+  <MemoryRouter initialEntries={["/"]}>
     <ResourceProvider map={resourceMap}>
       <Recipe history={history} location={location} match={match} />
     </ResourceProvider>
