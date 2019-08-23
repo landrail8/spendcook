@@ -26,7 +26,7 @@ const match: any = {
 const location: any = {};
 
 storiesOf("Recipe", module).add("Страница рецепта", () => (
-  <MemoryRouter initialEntries={["/recipes/1"]}>
+  <MemoryRouter initialEntries={["/"]}>
     <ResourceProvider map={resourceMap}>
       <Recipe history={history} location={location} match={match} />
     </ResourceProvider>
